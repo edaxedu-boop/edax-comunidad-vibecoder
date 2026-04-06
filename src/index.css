@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Space Grotesk", sans-serif;
+  
+  --color-edax-primary: #000000;
+  --color-edax-accent: #0055ff;
+  --color-edax-bg: #ffffff;
+  --color-edax-surface: #f8f8f8;
+  --color-edax-border: #e5e5e5;
+}
+
+@layer base {
+  body {
+    @apply bg-edax-bg text-edax-primary font-sans antialiased;
+  }
+}
+
+.section-border {
+  @apply border-t border-edax-border;
+}
+
+.grid-line {
+  @apply border-r border-edax-border;
+}
+
+.btn-primary {
+  @apply px-8 py-4 bg-edax-primary text-white font-bold rounded-none hover:bg-edax-accent transition-all duration-300;
+}
+
+.btn-secondary {
+  @apply px-8 py-4 bg-transparent border border-edax-primary text-edax-primary font-bold rounded-none hover:bg-edax-primary hover:text-white transition-all duration-300;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-edax-bg;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-edax-border rounded-full hover:bg-gray-300 transition-colors;
+}
+
+/* Remove generic AI-like glows/gradients */
+.no-slop {
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
