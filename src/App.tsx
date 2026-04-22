@@ -480,6 +480,27 @@ function Tienda() {
   
   const [gorraColor, setGorraColor] = useState('Negro');
 
+  useEffect(() => {
+    // Si somos el popup que acaba de terminar de pagar con éxito:
+    const searchParams = new URLSearchParams(window.location.search);
+    if (window.opener && searchParams.get('status') === 'success') {
+      window.opener.postMessage('pago_exitoso', '*');
+      window.close();
+    }
+
+    // Si somos la ventana principal, escuchamos al popup:
+    const handleMessage = (e: MessageEvent) => {
+      if (e.data === 'pago_exitoso') {
+        alert("¡Pago realizado con éxito! Tu orden ha sido confirmada.");
+        setCart([]);
+        setIsCartOpen(false);
+        setIsCheckout(false);
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   const addToCart = (product: any) => {
     setCart([...cart, product]);
     setIsCartOpen(true);
@@ -505,7 +526,17 @@ function Tienda() {
       const data = await response.json();
       
       if (data.redirectUrl) {
-        window.location.href = data.redirectUrl;
+        // Abrir en una ventana popup elegante en lugar de sacar al usuario de la web
+        const width = 600;
+        const height = 750;
+        const left = (window.innerWidth / 2) - (width / 2);
+        const top = (window.innerHeight / 2) - (height / 2);
+        window.open(
+          data.redirectUrl, 
+          'PagoFlow', 
+          `toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=${width}, height=${height}, top=${top}, left=${left}`
+        );
+        setIsProcessing(false);
       } else {
         alert("Error al procesar: " + (data.error || "Desconocido"));
         setIsProcessing(false);
