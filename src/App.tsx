@@ -142,6 +142,7 @@ export default function App() {
               <a href="#comunidad" className="hover:text-edax-accent transition-colors">Comunidad</a>
               <a href="#talleres" className="hover:text-edax-accent transition-colors">Talleres</a>
               <a href="#stack" className="hover:text-edax-accent transition-colors">Stack</a>
+              <a href="#tienda" className="hover:text-edax-accent transition-colors">Tienda</a>
             </div>
             <a 
               href="https://chat.whatsapp.com/K0gTWpN3hcMLcxZk7BPE2f"
@@ -482,6 +483,59 @@ export default function App() {
                 +50 Miembros
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Merch Section */}
+      <section id="tienda" className="max-w-[1360px] mx-auto border-x border-edax-border border-t border-edax-primary">
+        <div className="p-3 md:p-6">
+          <SectionHeader 
+            number="05" 
+            title="Tienda" 
+            subtitle="Viste el código. Expresa tu vibe." 
+          />
+          <div className="grid md:grid-cols-2 border-l border-t border-edax-border">
+            {/* Producto 1 */}
+            <div className="p-6 border-r border-b border-edax-border group">
+              <div className="aspect-square bg-edax-surface overflow-hidden relative mb-6 border border-edax-border">
+                <img src="/images/polo.png" alt="Polo EDAX" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute top-4 right-4 bg-edax-primary text-white px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest">
+                  Nuevo
+                </div>
+              </div>
+              <div className="flex justify-between items-end">
+                <div>
+                  <h3 className="font-display font-bold text-2xl uppercase tracking-tight">Polo Vibecoder</h3>
+                  <p className="text-gray-500 font-mono text-[10px] uppercase tracking-widest mt-1">Algodón Premium / Oversize</p>
+                </div>
+                <div className="text-right">
+                  <span className="font-display font-bold text-2xl text-edax-accent">S/ 45.00</span>
+                </div>
+              </div>
+              <a href="https://chat.whatsapp.com/K0gTWpN3hcMLcxZk7BPE2f" target="_blank" rel="noopener noreferrer" className="mt-6 w-full btn-primary py-4 text-sm tracking-widest flex items-center justify-center gap-3 uppercase font-bold group-hover:bg-edax-accent">
+                COMPRAR AHORA <ArrowRight size={16} />
+              </a>
+            </div>
+
+            {/* Producto 2 */}
+            <div className="p-6 border-r border-b border-edax-border group">
+              <div className="aspect-square bg-edax-surface overflow-hidden relative mb-6 border border-edax-border">
+                <img src="/images/gorro.png" alt="Gorra EDAX" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+              <div className="flex justify-between items-end">
+                <div>
+                  <h3 className="font-display font-bold text-2xl uppercase tracking-tight">Gorra Edax</h3>
+                  <p className="text-gray-500 font-mono text-[10px] uppercase tracking-widest mt-1">Snapback / Bordado 3D</p>
+                </div>
+                <div className="text-right">
+                  <span className="font-display font-bold text-2xl text-edax-accent">S/ 35.00</span>
+                </div>
+              </div>
+              <a href="https://chat.whatsapp.com/K0gTWpN3hcMLcxZk7BPE2f" target="_blank" rel="noopener noreferrer" className="mt-6 w-full btn-primary py-4 text-sm tracking-widest flex items-center justify-center gap-3 uppercase font-bold group-hover:bg-edax-accent">
+                COMPRAR AHORA <ArrowRight size={16} />
+              </a>
+            </div>
           </div>
         </div>
       </section>
