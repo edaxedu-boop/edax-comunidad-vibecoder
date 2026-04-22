@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Users, 
@@ -20,7 +21,10 @@ import {
   Play,
   Pause,
   Volume2,
-  VolumeX
+  VolumeX,
+  Menu,
+  X,
+  ShoppingCart
 } from "lucide-react";
 
 // @ts-ignore
@@ -124,38 +128,9 @@ const GridCard = ({ icon: Icon, title, description, border = true }: any) => (
   </div>
 );
 
-export default function App() {
+function Home() {
   return (
-    <div className="min-h-screen selection:bg-edax-accent selection:text-white custom-scrollbar bg-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-white border-b border-edax-primary">
-        <div className="max-w-[1360px] mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img src="/images/logo.png" alt="EDAX Logo" className="h-8 w-auto object-contain" />
-            <div className="h-4 w-[1px] bg-edax-border hidden sm:block" />
-            <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-gray-400 hidden sm:block">
-              Comunidad Vibecoder / Lima PE
-            </span>
-          </div>
-          <div className="flex items-center gap-8">
-            <div className="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest">
-              <a href="#comunidad" className="hover:text-edax-accent transition-colors">Comunidad</a>
-              <a href="#talleres" className="hover:text-edax-accent transition-colors">Talleres</a>
-              <a href="#stack" className="hover:text-edax-accent transition-colors">Stack</a>
-              <a href="#tienda" className="hover:text-edax-accent transition-colors">Tienda</a>
-            </div>
-            <a 
-              href="https://chat.whatsapp.com/K0gTWpN3hcMLcxZk7BPE2f"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-2 bg-edax-primary text-white text-[11px] font-bold uppercase tracking-widest hover:bg-edax-accent transition-all"
-            >
-              Unirse
-            </a>
-          </div>
-        </div>
-      </nav>
-
+    <>
       {/* Hero Section */}
       <header className="pt-24 pb-16 border-b border-edax-primary relative overflow-hidden flex min-h-[calc(100vh-64px)] items-center">
         {/* Subtle grid background for technical feel */}
@@ -486,9 +461,161 @@ export default function App() {
           </div>
         </div>
       </section>
+    </>
+  );
+}
+
+function Tienda() {
+  const [cart, setCart] = useState<{id: string, name: string, price: number, size: string, color: string}[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckout, setIsCheckout] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  // Forms
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
+  
+  // Product Selections
+  const [poloSize, setPoloSize] = useState('M');
+  const [poloColor, setPoloColor] = useState('Negro');
+  
+  const [gorraColor, setGorraColor] = useState('Negro');
+
+  const addToCart = (product: any) => {
+    setCart([...cart, product]);
+    setIsCartOpen(true);
+  };
+
+  const handlePay = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsProcessing(true);
+    
+    try {
+      const response = await fetch('/api/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          amount: total,
+          cart: cart
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.redirectUrl) {
+        window.location.href = data.redirectUrl;
+      } else {
+        alert("Error al procesar: " + (data.error || "Desconocido"));
+        setIsProcessing(false);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Hubo un error al conectar con el servidor de pagos.");
+      setIsProcessing(false);
+    }
+  };
+
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+  return (
+    <div className="pt-24 pb-16 min-h-screen flex flex-col justify-center relative">
+      {/* Cart Floating Button */}
+      <button 
+        onClick={() => setIsCartOpen(true)}
+        className="fixed bottom-8 right-8 bg-edax-primary text-white p-4 rounded-full shadow-2xl z-40 hover:bg-edax-accent transition-all"
+      >
+        <ShoppingCart size={24} />
+        {cart.length > 0 && (
+          <span className="absolute -top-2 -right-2 bg-edax-accent w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold">
+            {cart.length}
+          </span>
+        )}
+      </button>
+
+      {/* Cart Modal */}
+      <AnimatePresence>
+        {isCartOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex justify-end"
+          >
+            <motion.div 
+              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+              className="bg-white w-full max-w-md h-full shadow-2xl flex flex-col"
+            >
+              <div className="p-6 border-b border-gray-200 flex justify-between items-center bg-edax-primary text-white">
+                <h3 className="font-display font-bold text-2xl uppercase">Tu Carrito</h3>
+                <button onClick={() => { setIsCartOpen(false); setIsCheckout(false); }}><X size={24} /></button>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto p-6">
+                {!isCheckout ? (
+                  <>
+                    {cart.length === 0 ? (
+                      <p className="text-gray-500 font-mono text-xs uppercase tracking-widest text-center mt-12">El carrito está vacío</p>
+                    ) : (
+                      <div className="space-y-6">
+                        {cart.map((item, i) => (
+                          <div key={i} className="flex justify-between items-center border-b border-gray-100 pb-4">
+                            <div>
+                              <p className="font-bold uppercase tracking-tight text-sm">{item.name}</p>
+                              <p className="text-gray-500 font-mono text-[10px] uppercase mt-1">Talla: {item.size} | Color: {item.color}</p>
+                            </div>
+                            <span className="font-bold">S/ {item.price.toFixed(2)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <form id="checkout-form" onSubmit={handlePay} className="space-y-4">
+                    <h4 className="font-bold uppercase tracking-widest text-sm mb-4">Datos de Compra</h4>
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Nombre Completo</label>
+                      <input required type="text" className="w-full border border-gray-300 p-3 text-sm focus:border-edax-accent outline-none" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Número Celular</label>
+                      <input required type="tel" className="w-full border border-gray-300 p-3 text-sm focus:border-edax-accent outline-none" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Correo Electrónico</label>
+                      <input required type="email" className="w-full border border-gray-300 p-3 text-sm focus:border-edax-accent outline-none" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                    </div>
+                  </form>
+                )}
+              </div>
+
+              <div className="p-6 border-t border-gray-200 bg-gray-50">
+                <div className="flex justify-between items-center mb-6">
+                  <span className="font-mono text-xs font-bold uppercase tracking-widest">Total</span>
+                  <span className="font-display font-bold text-2xl text-edax-accent">S/ {total.toFixed(2)}</span>
+                </div>
+                {cart.length > 0 && !isCheckout && (
+                  <button onClick={() => setIsCheckout(true)} className="w-full btn-primary py-4 font-bold uppercase tracking-widest">
+                    Continuar al Pago
+                  </button>
+                )}
+                {isCheckout && (
+                  <button 
+                    form="checkout-form" 
+                    type="submit" 
+                    disabled={isProcessing}
+                    className="w-full bg-edax-accent text-white py-4 font-bold uppercase tracking-widest hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isProcessing ? 'Procesando...' : 'Pagar con Flow'}
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Merch Section */}
-      <section id="tienda" className="max-w-[1360px] mx-auto border-x border-edax-border border-t border-edax-primary">
+      <section id="tienda" className="max-w-[1360px] w-full mx-auto border-x border-edax-border border-t border-edax-primary relative z-10">
         <div className="p-3 md:p-6">
           <SectionHeader 
             number="05" 
@@ -504,18 +631,36 @@ export default function App() {
                   Nuevo
                 </div>
               </div>
-              <div className="flex justify-between items-end">
-                <div>
-                  <h3 className="font-display font-bold text-2xl uppercase tracking-tight">Polo Vibecoder</h3>
-                  <p className="text-gray-500 font-mono text-[10px] uppercase tracking-widest mt-1">Algodón Premium / Oversize</p>
-                </div>
-                <div className="text-right">
+              <div className="mb-6 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-display font-bold text-2xl uppercase tracking-tight">Polo Vibecoder</h3>
+                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-widest mt-1">Algodón Premium / Oversize</p>
+                  </div>
                   <span className="font-display font-bold text-2xl text-edax-accent">S/ 45.00</span>
                 </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Talla</label>
+                    <select className="w-full border border-gray-300 p-2 text-xs uppercase focus:border-edax-accent outline-none" value={poloSize} onChange={(e) => setPoloSize(e.target.value)}>
+                      {['S', 'M', 'L', 'XL'].map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Color</label>
+                    <select className="w-full border border-gray-300 p-2 text-xs uppercase focus:border-edax-accent outline-none" value={poloColor} onChange={(e) => setPoloColor(e.target.value)}>
+                      {['Blanco', 'Negro'].map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                </div>
               </div>
-              <a href="https://chat.whatsapp.com/K0gTWpN3hcMLcxZk7BPE2f" target="_blank" rel="noopener noreferrer" className="mt-6 w-full btn-primary py-4 text-sm tracking-widest flex items-center justify-center gap-3 uppercase font-bold group-hover:bg-edax-accent">
-                COMPRAR AHORA <ArrowRight size={16} />
-              </a>
+              <button 
+                onClick={() => addToCart({id: 'polo', name: 'Polo Vibecoder', price: 45, size: poloSize, color: poloColor})}
+                className="w-full btn-primary py-4 text-sm tracking-widest flex items-center justify-center gap-3 uppercase font-bold group-hover:bg-edax-accent"
+              >
+                AÑADIR AL CARRITO <ShoppingCart size={16} />
+              </button>
             </div>
 
             {/* Producto 2 */}
@@ -523,22 +668,128 @@ export default function App() {
               <div className="aspect-square bg-edax-surface overflow-hidden relative mb-6 border border-edax-border">
                 <img src="/images/gorro.png" alt="Gorra EDAX" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
-              <div className="flex justify-between items-end">
-                <div>
-                  <h3 className="font-display font-bold text-2xl uppercase tracking-tight">Gorra Edax</h3>
-                  <p className="text-gray-500 font-mono text-[10px] uppercase tracking-widest mt-1">Snapback / Bordado 3D</p>
-                </div>
-                <div className="text-right">
+              <div className="mb-6 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-display font-bold text-2xl uppercase tracking-tight">Gorra Edax</h3>
+                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-widest mt-1">Snapback / Bordado 3D</p>
+                  </div>
                   <span className="font-display font-bold text-2xl text-edax-accent">S/ 35.00</span>
                 </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Talla</label>
+                    <select className="w-full border border-gray-300 p-2 text-xs uppercase bg-gray-100 cursor-not-allowed text-gray-400" disabled value="Estándar">
+                      <option value="Estándar">Estándar</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Color</label>
+                    <select className="w-full border border-gray-300 p-2 text-xs uppercase focus:border-edax-accent outline-none" value={gorraColor} onChange={(e) => setGorraColor(e.target.value)}>
+                      {['Blanco', 'Negro'].map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                </div>
               </div>
-              <a href="https://chat.whatsapp.com/K0gTWpN3hcMLcxZk7BPE2f" target="_blank" rel="noopener noreferrer" className="mt-6 w-full btn-primary py-4 text-sm tracking-widest flex items-center justify-center gap-3 uppercase font-bold group-hover:bg-edax-accent">
-                COMPRAR AHORA <ArrowRight size={16} />
-              </a>
+              <button 
+                onClick={() => addToCart({id: 'gorra', name: 'Gorra Edax', price: 35, size: 'Estándar', color: gorraColor})}
+                className="w-full btn-primary py-4 text-sm tracking-widest flex items-center justify-center gap-3 uppercase font-bold group-hover:bg-edax-accent"
+              >
+                AÑADIR AL CARRITO <ShoppingCart size={16} />
+              </button>
             </div>
           </div>
         </div>
       </section>
+    </div>
+  );
+}
+
+export default function App() {
+  const { pathname } = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  return (
+    <div className="min-h-screen selection:bg-edax-accent selection:text-white custom-scrollbar bg-white">
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 bg-white border-b border-edax-primary">
+        <div className="max-w-[1360px] mx-auto px-6 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link to="/">
+              <img src="/images/logo.png" alt="EDAX Logo" className="h-8 w-auto object-contain" />
+            </Link>
+            <div className="h-4 w-[1px] bg-edax-border hidden sm:block" />
+            <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-gray-400 hidden sm:block">
+              Comunidad Vibecoder / Lima PE
+            </span>
+          </div>
+          
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-8">
+            <div className="flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest">
+              <a href="/#comunidad" className="hover:text-edax-accent transition-colors">Comunidad</a>
+              <a href="/#talleres" className="hover:text-edax-accent transition-colors">Talleres</a>
+              <a href="/#stack" className="hover:text-edax-accent transition-colors">Stack</a>
+              <Link to="/tienda" className="hover:text-edax-accent transition-colors">Tienda</Link>
+            </div>
+            <a 
+              href="https://chat.whatsapp.com/K0gTWpN3hcMLcxZk7BPE2f"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-2 bg-edax-primary text-white text-[11px] font-bold uppercase tracking-widest hover:bg-edax-accent transition-all"
+            >
+              Unirse
+            </a>
+          </div>
+
+          {/* Mobile Hamburger Toggle */}
+          <button 
+            className="md:hidden text-edax-primary hover:text-edax-accent transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle Menu"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Dropdown Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div 
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="md:hidden border-t border-edax-primary bg-white overflow-hidden shadow-2xl"
+            >
+              <div className="flex flex-col p-6 gap-6 font-display font-bold uppercase tracking-widest text-sm">
+                <a href="/#comunidad" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-edax-accent transition-colors">Comunidad</a>
+                <a href="/#talleres" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-edax-accent transition-colors">Talleres</a>
+                <a href="/#stack" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-edax-accent transition-colors">Stack</a>
+                <Link to="/tienda" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-edax-accent transition-colors">Tienda</Link>
+                <a 
+                  href="https://chat.whatsapp.com/K0gTWpN3hcMLcxZk7BPE2f"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-edax-primary text-white py-4 text-center mt-4 text-[11px]"
+                >
+                  UNIRSE A LA COMUNIDAD
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/tienda" element={<Tienda />} />
+      </Routes>
 
       {/* CTA */}
       <section className="bg-edax-primary text-white py-16">
