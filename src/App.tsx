@@ -960,123 +960,143 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
 // ==========================================
 function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, setIsProcessing }: any) {
   const brickContainerId = "paymentBrick_container";
-  const mpRef = useRef<any>(null);
+  const [preferenceId, setPreferenceId] = useState<string | null>(null);
 
+  // 1. Obtener el Preference ID del backend
   useEffect(() => {
-    const initBrick = async () => {
-      if (!window.MercadoPago) {
-        console.error("SDK de Mercado Pago no cargado");
-        return;
+    const fetchPreference = async () => {
+      try {
+        const response = await fetch('/api/create-preference', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: total,
+            description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
+            items: cart.map((item: any) => ({
+               title: item.name,
+               unit_price: item.price,
+               quantity: 1,
+               currency_id: 'PEN'
+            }))
+          })
+        });
+        const data = await response.json();
+        if (data.id) {
+          setPreferenceId(data.id);
+        }
+      } catch (err) {
+        console.error("Error fetching preference:", err);
       }
+    };
+    fetchPreference();
+  }, [total]);
 
-      // Limpiar contenedor previo si existe
+  // 2. Inicializar el Brick cuando tengamos el preferenceId
+  useEffect(() => {
+    if (!preferenceId) return;
+
+    const initBrick = async () => {
+      if (!window.MercadoPago) return;
+
       const container = document.getElementById(brickContainerId);
       if (container) container.innerHTML = '';
 
       const mp = new window.MercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, {
         locale: 'es-PE'
       });
-      mpRef.current = mp;
 
       const bricksBuilder = mp.bricks();
 
-      const renderPaymentBrick = async (bricksBuilder: any) => {
-        const settings = {
-          initialization: {
-            amount: total,
-            payer: {
-              email: formData.email,
+      const settings = {
+        initialization: {
+          amount: total,
+          preferenceId: preferenceId, // CLAVE: Con el PreferenceID aparecen todos los métodos
+          payer: {
+            email: formData.email,
+          },
+        },
+        customization: {
+          paymentMethods: {
+            creditCard: "all",
+            debitCard: "all",
+            ticket: "all",
+            bankTransfer: "all",
+            maxInstallments: 1
+          },
+          visual: {
+            style: {
+              theme: "default",
             },
           },
-          customization: {
-            paymentMethods: {
-              creditCard: "all",
-              debitCard: "all",
-              ticket: "all",
-              bankTransfer: "all",
-              wallet: "all",
-              maxInstallments: 1
-            },
-            visual: {
-              hideStatusDetails: false,
-              style: {
-                theme: "default",
-              },
-            },
+        },
+        callbacks: {
+          onReady: () => {
+            console.log("Brick con PreferenceID listo");
           },
-          callbacks: {
-            onReady: () => {
-              console.log("Brick listo");
-            },
-            onSubmit: async ({ selectedPaymentMethod, formData: mpFormData }: any) => {
-              setIsProcessing(true);
-              try {
-                const payload = {
-                  ...mpFormData,
-                  description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
-                  cart: cart,
-                  // Datos extra que nuestro backend espera
-                  email: formData.email,
-                  phone: formData.phone,
-                  name: formData.name,
-                };
+          onSubmit: async ({ selectedPaymentMethod, formData: mpFormData }: any) => {
+            setIsProcessing(true);
+            try {
+              // Con PreferenceID, el onSubmit puede manejar el pago automáticamente
+              // o podemos enviarlo a nuestro backend de pagos avanzado
+              const payload = {
+                ...mpFormData,
+                description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
+                cart: cart,
+                email: formData.email,
+                phone: formData.phone,
+                name: formData.name,
+              };
 
-                const response = await fetch('/api/create-payment', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(payload)
-                });
+              const response = await fetch('/api/create-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              });
 
-                const result = await response.json();
+              const result = await response.json();
 
-                if (result.status === 'approved' || (result.transaction_details && result.transaction_details.external_resource_url)) {
-                  if (result.transaction_details?.external_resource_url) {
-                    window.open(result.transaction_details.external_resource_url, '_blank');
-                    alert("¡Código de pago generado! Revisa la nueva ventana.");
-                  } else {
-                    alert("¡Pago exitoso! Gracias por tu compra.");
-                  }
-                  onSuccess();
-                } else {
-                  throw new Error(result.error || result.message || "Error en el pago");
+              if (result.status === 'approved' || (result.transaction_details && result.transaction_details.external_resource_url)) {
+                if (result.transaction_details?.external_resource_url) {
+                  window.open(result.transaction_details.external_resource_url, '_blank');
                 }
-              } catch (error: any) {
-                console.error(error);
-                alert(error.message || "Ocurrió un error al procesar el pago");
-              } finally {
-                setIsProcessing(false);
+                onSuccess();
+              } else {
+                throw new Error(result.error || result.message || "Error en el pago");
               }
-            },
-            onError: (error: any) => {
-              console.error("Brick Error:", error);
-            },
+            } catch (error: any) {
+              console.error(error);
+              alert(error.message || "Error al procesar pago");
+            } finally {
+              setIsProcessing(false);
+            }
           },
-        };
-        window.paymentBrickController = await bricksBuilder.create(
-          'payment',
-          brickContainerId,
-          settings
-        );
+          onError: (error: any) => {
+            console.error("Brick Error:", error);
+          },
+        },
       };
 
-      renderPaymentBrick(bricksBuilder);
+      await bricksBuilder.create('payment', brickContainerId, settings);
     };
 
     initBrick();
-
-    return () => {
-      // Limpieza si es necesario
-    };
-  }, [total, formData.email]);
+  }, [preferenceId, total]);
 
   return (
     <div className="animate-in fade-in duration-500 min-h-[400px]">
-      <div id={brickContainerId}></div>
+      {!preferenceId ? (
+         <div className="flex flex-col items-center justify-center h-64 gap-4">
+            <div className="w-8 h-8 border-2 border-edax-accent border-t-transparent rounded-full animate-spin" />
+            <p className="font-mono text-[10px] uppercase tracking-widest text-gray-400">Cargando métodos de pago...</p>
+         </div>
+      ) : (
+        <div id={brickContainerId}></div>
+      )}
       {isProcessing && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-[60] flex items-center justify-center">
-           <div className="bg-white p-6 shadow-2xl flex flex-col items-center gap-4">
-              <div className="w-10 h-10 border-4 border-edax-accent border-t-transparent rounded-full animate-spin" />
-              <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-edax-primary">Procesando Pago Seguro...</p>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] flex items-center justify-center">
+           <div className="bg-white p-10 shadow-2xl flex flex-col items-center gap-6">
+              <div className="w-12 h-12 border-4 border-edax-accent border-t-transparent rounded-full animate-spin" />
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-edax-primary">Transacción en curso...</p>
            </div>
         </div>
       )}
