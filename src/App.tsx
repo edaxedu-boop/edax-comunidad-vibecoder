@@ -1009,9 +1009,13 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
 
       const settings = {
         initialization: {
-          preferenceId: preferenceId, // La preferencia ya contiene el monto y los items
+          preferenceId: preferenceId,
           payer: {
             email: formData.email,
+            identification: {
+              type: 'DNI',
+              number: '00000000' // Placeholder para forzar visibilidad
+            }
           },
         },
         customization: {
@@ -1021,6 +1025,9 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
             ticket: "all",
             bankTransfer: "all",
             mercadoPago: "all",
+            types: {
+              included: ['credit_card', 'debit_card', 'ticket', 'bank_transfer', 'wallet_topup'],
+            },
             maxInstallments: 1
           },
           visual: {
