@@ -1018,6 +1018,11 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
         },
         customization: {
           paymentMethods: {
+            ticket: "all",
+            creditCard: "all",
+            prepaidCard: "all",
+            debitCard: "all",
+            mercadoPago: "all",
             maxInstallments: 1
           },
           visual: {
