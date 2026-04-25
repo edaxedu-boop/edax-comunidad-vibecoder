@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Users, 
@@ -481,24 +481,16 @@ function Tienda() {
   const [gorraColor, setGorraColor] = useState('Negro');
 
   useEffect(() => {
-    // Si somos el popup que acaba de terminar de pagar con éxito:
+    // Detectar éxito al retornar de Mercado Pago
     const searchParams = new URLSearchParams(window.location.search);
-    if (window.opener && searchParams.get('status') === 'success') {
-      window.opener.postMessage('pago_exitoso', '*');
-      window.close();
+    if (searchParams.get('status') === 'success') {
+      alert("¡Pago realizado con éxito! Tu orden ha sido confirmada.");
+      setCart([]);
+      setIsCartOpen(false);
+      setIsCheckout(false);
+      // Limpiar parámetros de la URL sin recargar
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
-
-    // Si somos la ventana principal, escuchamos al popup:
-    const handleMessage = (e: MessageEvent) => {
-      if (e.data === 'pago_exitoso') {
-        alert("¡Pago realizado con éxito! Tu orden ha sido confirmada.");
-        setCart([]);
-        setIsCartOpen(false);
-        setIsCheckout(false);
-      }
-    };
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
   }, []);
 
   const addToCart = (product: any) => {
@@ -525,17 +517,20 @@ function Tienda() {
 
       const data = await response.json();
       
-      if (data.redirectUrl) {
-        // Abrir en una ventana popup elegante en lugar de sacar al usuario de la web
-        const width = 600;
-        const height = 750;
-        const left = (window.innerWidth / 2) - (width / 2);
-        const top = (window.innerHeight / 2) - (height / 2);
-        window.open(
-          data.redirectUrl, 
-          'PagoFlow', 
-          `toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=${width}, height=${height}, top=${top}, left=${left}`
-        );
+      if (data.preferenceId) {
+        // Inicializar Mercado Pago nativo
+        const mp = new window.MercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, {
+          locale: 'es-PE'
+        });
+        
+        // Abrir el Checkout Pro como un modal nativo sobre la web
+        mp.checkout({
+          preference: {
+            id: data.preferenceId
+          },
+          autoOpen: true
+        });
+        
         setIsProcessing(false);
       } else {
         alert("Error al procesar: " + (data.error || "Desconocido"));
