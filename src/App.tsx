@@ -954,172 +954,166 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
 }
 
 // ==========================================
-// COMPONENTE DE PAGO - CHECKOUT BRICKS (PERU)
-// Payment Brick con preferenceId
-// Forzando bankTransfer y ticket para Yape/PagoEfectivo
+// COMPONENTE DE PAGO - CHECKOUT PRO (POP-UP)
+// Se abre en una ventana emergente sin salir de la página
+// Garantiza que salgan Yape y PagoEfectivo
 // ==========================================
-function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, setIsProcessing }: any) {
-  const BRICK_CONTAINER = 'paymentBrick_container';
-  const [preferenceId, setPreferenceId] = useState<string | null>(null);
-  const [loadingPref, setLoadingPref] = useState(true);
-  const [prefError, setPrefError] = useState<string | null>(null);
-  const controllerRef = useRef<any>(null);
+function NativePaymentForm({ total, formData, cart, isProcessing, setIsProcessing }: any) {
+  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const [loadingUrl, setLoadingUrl] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [popupOpen, setPopupOpen] = useState(false);
 
-  // 1. Crear preferencia en el backend
   useEffect(() => {
-    const createPref = async () => {
-      setLoadingPref(true);
-      setPrefError(null);
+    const fetchCheckoutUrl = async () => {
+      setLoadingUrl(true);
+      setError(null);
       try {
-        const res = await fetch('/api/create-preference', {
+        const response = await fetch('/api/create-preference', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             amount: total,
             description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
             items: cart.map((item: any) => ({
-              title: item.name,
-              unit_price: item.price,
-              quantity: item.quantity || 1,
-              currency_id: 'PEN',
+               title: item.name,
+               unit_price: item.price,
+               quantity: item.quantity || 1,
+               currency_id: 'PEN'
             })),
-          }),
+            payer_email: formData.email,
+            payer_name: formData.name,
+          })
         });
-        const data = await res.json();
+        const data = await response.json();
+        
+        // init_point es la URL de Checkout Pro
         if (data.id) {
-          setPreferenceId(data.id);
+          const url = data.init_point || `https://www.mercadopago.com.pe/checkout/v1/redirect?pref_id=${data.id}`;
+          setCheckoutUrl(url);
         } else {
-          setPrefError(data.error || 'No se pudo preparar el pago.');
+          setError('No se pudo obtener la URL de pago.');
         }
-      } catch (e) {
-        setPrefError('Error de conexión con el servidor.');
+      } catch (err: any) {
+        setError('Error al conectar con el servidor de pagos.');
       } finally {
-        setLoadingPref(false);
+        setLoadingUrl(false);
       }
     };
-    createPref();
-  }, [total]);
+    if (total > 0) fetchCheckoutUrl();
+  }, [total, formData.email, cart, formData.name]);
 
-  // 2. Montar el Payment Brick cuando tengamos el preferenceId
-  useEffect(() => {
-    if (!preferenceId || !window.MercadoPago) return;
+  const handlePagar = () => {
+    if (!checkoutUrl) return;
+    
+    // Abrir en Pop-Up centrado
+    const width = 600;
+    const height = 800;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+    
+    setPopupOpen(true);
+    
+    const popup = window.open(
+      checkoutUrl, 
+      'MercadoPagoCheckout', 
+      `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
+    );
 
-    const mountBrick = async () => {
-      // Desmontar instancia anterior si existe
-      if (controllerRef.current) {
-        try { controllerRef.current.unmount(); } catch (_) {}
-        controllerRef.current = null;
-      }
-      const container = document.getElementById(BRICK_CONTAINER);
-      if (container) container.innerHTML = '';
+    // Monitorear si el usuario cierra el pop-up
+    if (popup) {
+      const timer = setInterval(() => {
+        if (popup.closed) {
+          clearInterval(timer);
+          setPopupOpen(false);
+        }
+      }, 1000);
+    } else {
+      // Si el navegador bloqueó el pop-up, redirigir normal
+      window.location.href = checkoutUrl;
+    }
+  };
 
-      const mp = new window.MercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: 'es-PE' });
-
-      try {
-        controllerRef.current = await mp.bricks().create('payment', BRICK_CONTAINER, {
-          initialization: {
-            amount: total,
-            preferenceId,
-          },
-          customization: {
-            paymentMethods: {
-              ticket: 'all',          // Activa PagoEfectivo
-              bankTransfer: 'all',    // Activa Yape como transferencia
-              creditCard: 'all',
-              debitCard: 'all',
-              prepaidCard: 'all',
-              mercadoPago: 'all',     // Wallet MP
-              maxInstallments: 1,
-            },
-            visual: { style: { theme: 'default' } },
-          },
-          callbacks: {
-            onReady: () => console.log('[Brick] Listo'),
-            onError: (err: any) => console.error('[Brick] Error:', err),
-            onSubmit: async ({ selectedPaymentMethod, formData: mpFormData }: any) => {
-              setIsProcessing(true);
-              try {
-                const res = await fetch('/api/create-payment', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    ...mpFormData,
-                    description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
-                    payer_name: formData.name,
-                    payer_phone: formData.phone,
-                    cart,
-                  }),
-                });
-                const result = await res.json();
-                if (
-                  result.status === 'approved' ||
-                  result.status === 'authorized' ||
-                  result.status === 'pending'
-                ) {
-                  if (result.transaction_details?.external_resource_url) {
-                    window.open(result.transaction_details.external_resource_url, '_blank');
-                  }
-                  onSuccess();
-                } else {
-                  throw new Error(result.message || result.error || 'Pago no aprobado');
-                }
-              } catch (err: any) {
-                alert(err.message || 'Error al procesar el pago.');
-              } finally {
-                setIsProcessing(false);
-              }
-            },
-          },
-        });
-      } catch (err) {
-        console.error('[Brick] No se pudo crear:', err);
-      }
-    };
-
-    mountBrick();
-
-    return () => {
-      if (controllerRef.current) {
-        try { controllerRef.current.unmount(); } catch (_) {}
-        controllerRef.current = null;
-      }
-    };
-  }, [preferenceId]);
-
-  if (loadingPref) {
+  if (loadingUrl) {
     return (
       <div className="flex flex-col items-center justify-center h-40 gap-4">
         <div className="w-8 h-8 border-2 border-edax-accent border-t-transparent rounded-full animate-spin" />
-        <p className="font-mono text-[10px] uppercase tracking-widest text-gray-400">Preparando métodos de pago...</p>
+        <p className="font-mono text-[10px] uppercase tracking-widest text-gray-400">Preparando pago seguro...</p>
       </div>
     );
   }
 
-  if (prefError) {
+  if (error) {
     return (
       <div className="border border-red-200 bg-red-50 p-6 text-center space-y-3">
         <p className="text-red-600 text-xs font-bold uppercase tracking-widest">Error al cargar pago</p>
-        <p className="text-red-400 text-[10px] font-mono">{prefError}</p>
-        <button onClick={() => window.location.reload()} className="text-[10px] underline text-red-500">
-          Reintentar
+        <p className="text-red-400 text-[10px] font-mono">{error}</p>
+        <button onClick={() => window.location.reload()} className="text-[10px] underline text-red-500 hover:text-red-700">
+          Intentar de nuevo
         </button>
       </div>
     );
   }
 
   return (
-    <div className="animate-in fade-in duration-500">
-      {isProcessing && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] flex items-center justify-center">
-          <div className="bg-white p-10 shadow-2xl flex flex-col items-center gap-6">
-            <div className="w-12 h-12 border-4 border-edax-accent border-t-transparent rounded-full animate-spin" />
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-edax-primary">
-              Procesando pago...
-            </p>
+    <div className="space-y-6 animate-in fade-in duration-500">
+      
+      {popupOpen && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] flex flex-col items-center justify-center p-6 text-center">
+          <div className="bg-white p-8 max-w-sm w-full space-y-6 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 animate-pulse" />
+            
+            <div className="w-16 h-16 border-4 border-blue-100 border-t-blue-500 rounded-full animate-spin mx-auto" />
+            
+            <div className="space-y-2">
+              <h3 className="font-bold text-lg uppercase tracking-widest text-gray-900">Completa tu pago</h3>
+              <p className="text-xs text-gray-500 font-mono">No cierres esta ventana hasta terminar en la ventana emergente de Mercado Pago.</p>
+            </div>
+
+            <button 
+              onClick={() => setPopupOpen(false)}
+              className="mt-4 text-[10px] font-bold text-gray-400 hover:text-gray-600 underline tracking-widest uppercase"
+            >
+              Cancelar o Volver
+            </button>
           </div>
         </div>
       )}
-      <div id={BRICK_CONTAINER} />
+
+      {/* Info de métodos disponibles */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: 'Tarjeta', icon: '💳' },
+          { label: 'Yape', icon: '📱' },
+          { label: 'PagoEfectivo', icon: '🏦' },
+        ].map((m) => (
+          <div key={m.label} className="border border-gray-100 p-3 text-center space-y-1">
+            <div className="text-xl">{m.icon}</div>
+            <p className="text-[9px] font-bold uppercase tracking-widest text-gray-500">{m.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-blue-50/50 border border-blue-100 p-4 space-y-1">
+        <p className="text-[9px] font-bold uppercase tracking-widest text-blue-500 text-center">
+          💡 Se abrirá una ventana emergente segura
+        </p>
+      </div>
+
+      <button
+        onClick={handlePagar}
+        disabled={isProcessing || !checkoutUrl}
+        className="w-full bg-edax-primary text-white py-5 font-bold uppercase tracking-[0.2em] text-[11px] hover:bg-edax-accent transition-all disabled:opacity-50 flex items-center justify-center gap-3 group shadow-lg shadow-black/10 hover:shadow-black/20"
+      >
+        {isProcessing
+          ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+          : <>CONTINUAR AL PAGO S/ {total.toFixed(2)}</>
+        }
+      </button>
+
+      <p className="text-center text-[8px] font-mono text-gray-300 uppercase tracking-widest flex items-center justify-center gap-2">
+        <span className="text-[12px]">🔒</span> Pago 100% seguro · Procesado por Mercado Pago
+      </p>
     </div>
   );
 }
