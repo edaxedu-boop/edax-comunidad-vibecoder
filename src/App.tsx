@@ -958,176 +958,126 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
 // ==========================================
 // COMPONENTE DE PAGO NATIVO (CUSTOM UI)
 // ==========================================
-function NativePaymentForm({ total, formData, setFormData, cart, onSuccess, isProcessing, setIsProcessing }: any) {
-  const [method, setMethod] = useState('card'); // 'card', 'yape', 'ticket'
-  const [cardData, setCardData] = useState({
-    number: '',
-    name: '',
-    expiry: '',
-    cvv: '',
-    dni: ''
-  });
-  const [yapeData, setYapeData] = useState({
-    phone: '',
-    otp: ''
-  });
+function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, setIsProcessing }: any) {
+  const brickContainerId = "paymentBrick_container";
+  const mpRef = useRef<any>(null);
 
-  const handleNativePay = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsProcessing(true);
+  useEffect(() => {
+    const initBrick = async () => {
+      if (!window.MercadoPago) {
+        console.error("SDK de Mercado Pago no cargado");
+        return;
+      }
 
-    try {
-      if (!window.MercadoPago) throw new Error("MercadoPago SDK no cargado.");
-      
+      // Limpiar contenedor previo si existe
+      const container = document.getElementById(brickContainerId);
+      if (container) container.innerHTML = '';
+
       const mp = new window.MercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, {
         locale: 'es-PE'
       });
-      
-      let payload: any = {
-        amount: total,
-        email: formData.email,
-        phone: formData.phone,
-        name: formData.name,
-        description: `EDAX Merch - ${cart.map((i:any) => i.name).join(', ')}`,
-        cart: cart
+      mpRef.current = mp;
+
+      const bricksBuilder = mp.bricks();
+
+      const renderPaymentBrick = async (bricksBuilder: any) => {
+        const settings = {
+          initialization: {
+            amount: total,
+            payer: {
+              email: formData.email,
+            },
+          },
+          customization: {
+            paymentMethods: {
+              creditCard: "all",
+              debitCard: "all",
+              ticket: "all", // PagoEfectivo
+              bankTransfer: ["yape"], // Yape
+              maxInstallments: 1
+            },
+            visual: {
+              style: {
+                theme: "default", // Usamos el default para máxima compatibilidad
+              },
+            },
+          },
+          callbacks: {
+            onReady: () => {
+              console.log("Brick listo");
+            },
+            onSubmit: async ({ selectedPaymentMethod, formData: mpFormData }: any) => {
+              setIsProcessing(true);
+              try {
+                const payload = {
+                  ...mpFormData,
+                  description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
+                  cart: cart,
+                  // Datos extra que nuestro backend espera
+                  email: formData.email,
+                  phone: formData.phone,
+                  name: formData.name,
+                };
+
+                const response = await fetch('/api/create-payment', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'approved' || (result.transaction_details && result.transaction_details.external_resource_url)) {
+                  if (result.transaction_details?.external_resource_url) {
+                    window.open(result.transaction_details.external_resource_url, '_blank');
+                    alert("¡Código de pago generado! Revisa la nueva ventana.");
+                  } else {
+                    alert("¡Pago exitoso! Gracias por tu compra.");
+                  }
+                  onSuccess();
+                } else {
+                  throw new Error(result.error || result.message || "Error en el pago");
+                }
+              } catch (error: any) {
+                console.error(error);
+                alert(error.message || "Ocurrió un error al procesar el pago");
+              } finally {
+                setIsProcessing(false);
+              }
+            },
+            onError: (error: any) => {
+              console.error("Brick Error:", error);
+            },
+          },
+        };
+        window.paymentBrickController = await bricksBuilder.create(
+          'payment',
+          brickContainerId,
+          settings
+        );
       };
 
-      if (method === 'card') {
-        const [month, year] = cardData.expiry.split('/');
-        const tokenResponse = await mp.createCardToken({
-          cardNumber: cardData.number.replace(/\s/g, ''),
-          cardholderName: cardData.name,
-          cardExpirationMonth: month,
-          cardExpirationYear: '20' + year,
-          securityCode: cardData.cvv,
-          identificationType: 'DNI',
-          identificationNumber: cardData.dni
-        });
+      renderPaymentBrick(bricksBuilder);
+    };
 
-        if (!tokenResponse.id) {
-          console.error("Token error:", tokenResponse);
-          throw new Error("Datos de tarjeta inválidos.");
-        }
-        
-        payload.token = tokenResponse.id;
-        payload.payment_method_id = 'visa';
-        payload.identificationType = 'DNI';
-        payload.identificationNumber = cardData.dni;
-      } else if (method === 'yape') {
-        payload.payment_method_id = 'yape';
-        payload.phone = yapeData.phone;
-        payload.otp = yapeData.otp;
-      } else {
-        payload.payment_method_id = 'pagoefectivo';
-      }
+    initBrick();
 
-      const response = await fetch('/api/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const result = await response.json();
-
-      if (result.status === 'approved' || (result.transaction_details && result.transaction_details.external_resource_url)) {
-        if (result.transaction_details?.external_resource_url) {
-          window.open(result.transaction_details.external_resource_url, '_blank');
-          alert("CIP Generado. Paga en tu app bancaria.");
-        } else {
-          alert("¡Pago aprobado! Tu orden está en camino.");
-        }
-        onSuccess();
-      } else {
-        alert("Pago rechazado: " + (result.error || result.message || result.status_detail || "Error desconocido"));
-      }
-    } catch (error: any) {
-      console.error(error);
-      alert(error.message || "Error al procesar el pago");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+    return () => {
+      // Limpieza si es necesario
+    };
+  }, [total, formData.email]);
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-      <div className="flex bg-gray-100 p-1 rounded-none">
-        {['card', 'yape', 'ticket'].map((m) => (
-          <button
-            key={m}
-            type="button"
-            onClick={() => setMethod(m)}
-            className={`flex-1 py-3 text-[10px] font-bold uppercase tracking-[0.15em] transition-all ${
-              method === m ? 'bg-white text-edax-primary shadow-sm' : 'bg-transparent text-gray-400 hover:text-gray-600'
-            }`}
-          >
-            {m === 'card' ? 'Tarjeta' : m === 'yape' ? 'Yape' : 'CIP'}
-          </button>
-        ))}
-      </div>
-
-      <form onSubmit={handleNativePay} className="space-y-6">
-        {method === 'card' && (
-          <div className="space-y-4">
-            <div className="group border-b border-gray-200 focus-within:border-edax-accent transition-colors">
-              <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Número de Tarjeta</label>
-              <input required placeholder="0000 0000 0000 0000" className="w-full py-2 text-sm font-mono bg-transparent outline-none" value={cardData.number} onChange={e => setCardData({...cardData, number: e.target.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim().slice(0, 19)})} />
-            </div>
-            <div className="group border-b border-gray-200 focus-within:border-edax-accent transition-colors">
-              <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Titular</label>
-              <input required placeholder="NOMBRE COMO FIGURA EN TARJETA" className="w-full py-2 text-sm font-display bg-transparent outline-none uppercase" value={cardData.name} onChange={e => setCardData({...cardData, name: e.target.value})} />
-            </div>
-            <div className="flex gap-6">
-              <div className="flex-1 group border-b border-gray-200 focus-within:border-edax-accent transition-colors">
-                <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Vencimiento</label>
-                <input required placeholder="MM/YY" className="w-full py-2 text-sm font-mono bg-transparent outline-none" value={cardData.expiry} onChange={e => setCardData({...cardData, expiry: e.target.value.replace(/\D/g, '').replace(/(.{2})/, '$1/').slice(0, 5)})} />
-              </div>
-              <div className="flex-1 group border-b border-gray-200 focus-within:border-edax-accent transition-colors">
-                <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">CVV</label>
-                <input required placeholder="000" className="w-full py-2 text-sm font-mono bg-transparent outline-none" value={cardData.cvv} onChange={e => setCardData({...cardData, cvv: e.target.value.slice(0, 4)})} />
-              </div>
-            </div>
-            <div className="group border-b border-gray-200 focus-within:border-edax-accent transition-colors">
-              <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">DNI / Documento</label>
-              <input required placeholder="NÚMERO DE DOCUMENTO" className="w-full py-2 text-sm font-mono bg-transparent outline-none" value={cardData.dni} onChange={e => setCardData({...cardData, dni: e.target.value})} />
-            </div>
-          </div>
-        )}
-
-        {method === 'yape' && (
-          <div className="space-y-6 pt-4">
-             <div className="space-y-4 px-2">
-                <div className="border-b border-gray-100 focus-within:border-edax-accent transition-colors">
-                  <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Celular Vinculado a Yape</label>
-                  <input required placeholder="900 000 000" className="w-full py-2 text-sm font-mono bg-transparent outline-none" value={yapeData.phone} onChange={e => setYapeData({...yapeData, phone: e.target.value})} />
-                </div>
-                <div className="border-b border-gray-100 focus-within:border-edax-accent transition-colors">
-                  <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Código de Aprobación (6 dígitos)</label>
-                  <input required placeholder="000 000" className="w-full py-2 text-sm font-mono bg-transparent outline-none" value={yapeData.otp} onChange={e => setYapeData({...yapeData, otp: e.target.value.slice(0, 6)})} />
-                </div>
-                <div className="bg-gray-50 p-3 flex items-start gap-3">
-                   <div className="w-1 h-1 rounded-full bg-edax-accent mt-1.5" />
-                   <p className="text-[8px] text-gray-500 font-mono uppercase leading-tight tracking-wider">Obtén el código en tu app Yape: <br/> Menú superior {">"} Yape con código.</p>
-                </div>
-             </div>
-          </div>
-        )}
-
-        {method === 'ticket' && (
-          <div className="p-6 bg-edax-surface border border-dashed border-gray-200 space-y-3">
-             <p className="text-[10px] font-bold uppercase tracking-widest">PagoEfectivo / CIP</p>
-             <p className="text-[9px] text-gray-500 font-mono leading-relaxed uppercase">Generaremos un código CIP único para esta compra.</p>
-          </div>
-        )}
-
-        <button 
-          type="submit" 
-          disabled={isProcessing}
-          className="w-full bg-edax-primary text-white py-4 font-bold uppercase tracking-[0.2em] text-[10px] hover:bg-edax-accent transition-all disabled:opacity-50 flex items-center justify-center gap-3"
-        >
-          {isProcessing ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : <>FINALIZAR ORDEN <ArrowRight size={14} /></>}
-        </button>
-      </form>
+    <div className="animate-in fade-in duration-500 min-h-[400px]">
+      <div id={brickContainerId}></div>
+      {isProcessing && (
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-[60] flex items-center justify-center">
+           <div className="bg-white p-6 shadow-2xl flex flex-col items-center gap-4">
+              <div className="w-10 h-10 border-4 border-edax-accent border-t-transparent rounded-full animate-spin" />
+              <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-edax-primary">Procesando Pago Seguro...</p>
+           </div>
+        </div>
+      )}
     </div>
   );
 }
-
