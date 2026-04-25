@@ -471,14 +471,26 @@ function Home() {
   );
 }
 
-function Tienda() {
+function App() {
   const [cart, setCart] = useState<{id: string, name: string, price: number, size: string, color: string}[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isCheckout, setIsCheckout] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  
-  // Forms
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
+
+  return (
+    <div className="bg-edax-bg text-edax-primary selection:bg-edax-accent selection:text-white">
+      <Navbar cartCount={cart.length} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/tienda" element={<Tienda cart={cart} setCart={setCart} formData={formData} setFormData={setFormData} />} />
+        <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} formData={formData} setFormData={setFormData} />} />
+      </Routes>
+      <Footer />
+    </div>
+  );
+}
+
+function Tienda({ cart, setCart, formData, setFormData }: any) {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const navigate = useNavigate();
   
   // Product Selections
   const [poloSize, setPoloSize] = useState('M');
@@ -504,12 +516,9 @@ function Tienda() {
     setIsCartOpen(true);
   };
 
-  const handlePay = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsProcessing(true);
-    // Pasamos a la fase de pago nativo
-    setIsCheckout(true);
-    setIsProcessing(false);
+  const handleProcederAlPago = () => {
+    setIsCartOpen(false);
+    navigate('/checkout');
   };
 
   const total = cart.reduce((sum, item) => sum + item.price, 0);
@@ -534,85 +543,48 @@ function Tienda() {
         {isCartOpen && (
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 flex justify-end"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex justify-end"
           >
             <motion.div 
               initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
               className="bg-white w-full max-w-md h-full shadow-2xl flex flex-col"
             >
-              <div className="p-6 border-b border-gray-200 flex justify-between items-center bg-edax-primary text-white">
-                <h3 className="font-display font-bold text-2xl uppercase">Tu Carrito</h3>
-                <button onClick={() => { setIsCartOpen(false); setIsCheckout(false); }}><X size={24} /></button>
+              <div className="p-6 border-b border-edax-primary flex justify-between items-center bg-edax-primary text-white">
+                <h3 className="font-display font-bold text-xl uppercase tracking-widest">Tu Carrito</h3>
+                <button onClick={() => setIsCartOpen(false)} className="hover:rotate-90 transition-transform"><X size={24} /></button>
               </div>
               
-              <div className="flex-1 overflow-y-auto p-6">
-                {!isCheckout ? (
-                  <>
-                    {cart.length === 0 ? (
-                      <p className="text-gray-500 font-mono text-xs uppercase tracking-widest text-center mt-12">El carrito está vacío</p>
-                    ) : (
-                      <div className="space-y-6">
-                        {cart.map((item, i) => (
-                          <div key={i} className="flex justify-between items-center border-b border-gray-100 pb-4">
-                            <div>
-                              <p className="font-bold uppercase tracking-tight text-sm">{item.name}</p>
-                              <p className="text-gray-500 font-mono text-[10px] uppercase mt-1">Talla: {item.size} | Color: {item.color}</p>
-                            </div>
-                            <span className="font-bold">S/ {item.price.toFixed(2)}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </>
+              <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+                {cart.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
+                    <ShoppingCart size={48} className="text-gray-200" />
+                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-[0.2em]">El carrito está vacío</p>
+                  </div>
                 ) : (
-                  <div className="space-y-8 animate-in fade-in duration-500">
-                    <div className="flex justify-between items-center">
-                       <button onClick={() => setIsCheckout(false)} className="text-[10px] uppercase font-bold text-gray-500 hover:text-black flex items-center gap-1 transition-colors">
-                          <ArrowRight className="rotate-180" size={12} /> Volver al Carrito
-                       </button>
-                    </div>
-                    
-                    {/* Sección 1: Datos de Contacto */}
-                    <div className="space-y-4">
-                      <h4 className="font-bold uppercase tracking-widest text-[11px] text-edax-accent mb-4 border-l-2 border-edax-accent pl-3">01. Datos de Envío</h4>
-                      <div className="grid gap-4">
-                        <input required placeholder="NOMBRE COMPLETO" className="w-full border-b border-gray-100 py-3 text-xs font-mono outline-none focus:border-edax-accent bg-transparent" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
-                        <div className="grid grid-cols-2 gap-4">
-                          <input required placeholder="EMAIL" className="w-full border-b border-gray-100 py-3 text-xs font-mono outline-none focus:border-edax-accent bg-transparent" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
-                          <input required placeholder="CELULAR" className="w-full border-b border-gray-100 py-3 text-xs font-mono outline-none focus:border-edax-accent bg-transparent" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+                  <div className="space-y-6">
+                    {cart.map((item: any, i: number) => (
+                      <div key={i} className="flex justify-between items-start border-b border-gray-100 pb-6 group">
+                        <div className="space-y-1">
+                          <p className="font-bold uppercase tracking-tight text-sm group-hover:text-edax-accent transition-colors">{item.name}</p>
+                          <p className="text-gray-400 font-mono text-[9px] uppercase tracking-widest">Talla: {item.size} | Color: {item.color}</p>
+                        </div>
+                        <div className="text-right">
+                          <span className="font-bold text-sm">S/ {item.price.toFixed(2)}</span>
                         </div>
                       </div>
-                    </div>
-
-                    {/* Sección 2: Pago */}
-                    <div className="space-y-6 pt-4">
-                      <h4 className="font-bold uppercase tracking-widest text-[11px] text-edax-accent mb-4 border-l-2 border-edax-accent pl-3">02. Método de Pago</h4>
-                      <NativePaymentForm 
-                        total={total} 
-                        formData={formData} 
-                        setFormData={setFormData}
-                        cart={cart}
-                        onSuccess={() => {
-                          setCart([]);
-                          setIsCartOpen(false);
-                          setIsCheckout(false);
-                        }}
-                        isProcessing={isProcessing}
-                        setIsProcessing={setIsProcessing}
-                      />
-                    </div>
+                    ))}
                   </div>
                 )}
               </div>
 
-              <div className="p-6 border-t border-gray-200 bg-gray-50">
-                <div className="flex justify-between items-center mb-6">
-                  <span className="font-mono text-xs font-bold uppercase tracking-widest text-gray-400">Subtotal Neto</span>
+              <div className="p-8 border-t border-gray-100 bg-white">
+                <div className="flex justify-between items-center mb-8">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Total Estimado</span>
                   <span className="font-display font-bold text-2xl text-edax-primary">S/ {total.toFixed(2)}</span>
                 </div>
-                {cart.length > 0 && !isCheckout && (
-                  <button onClick={() => setIsCheckout(true)} className="w-full btn-primary py-4 font-bold uppercase tracking-widest flex items-center justify-center gap-2 group">
-                    Proceder al Pago <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                {cart.length > 0 && (
+                  <button onClick={handleProcederAlPago} className="w-full btn-primary py-5 font-bold uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-3">
+                    PROCEDER AL PAGO <ArrowRight size={16} />
                   </button>
                 )}
               </div>
@@ -856,6 +828,141 @@ export default function App() {
           animation: marquee 30s linear infinite;
         }
       `}} />
+    </div>
+  );
+}
+
+// ==========================================
+// COMPONENTE DE PANTALLA COMPLETA: CHECKOUT
+// ==========================================
+function Checkout({ cart, setCart, formData, setFormData }: any) {
+  const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const total = cart.reduce((sum: number, item: any) => sum + item.price, 0);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (cart.length === 0) navigate('/tienda');
+  }, [cart, navigate]);
+
+  return (
+    <div className="min-h-screen bg-edax-surface pt-32 pb-20 px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-12 gap-12">
+          
+          {/* Columna Izquierda: Formularios */}
+          <div className="lg:col-span-7 space-y-12">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white p-8 md:p-12 border border-edax-border"
+            >
+              <button 
+                onClick={() => navigate('/tienda')}
+                className="mb-10 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-edax-accent flex items-center gap-2 transition-colors"
+              >
+                <ArrowRight size={12} className="rotate-180" /> Volver a la Tienda
+              </button>
+
+              <h2 className="text-4xl font-display font-bold uppercase tracking-tighter mb-12">Finalizar Compra</h2>
+
+              <div className="space-y-12">
+                {/* 01. DATOS DE ENVÍO */}
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4">
+                    <span className="w-8 h-8 rounded-full bg-edax-primary text-white flex items-center justify-center text-xs font-bold font-mono">01</span>
+                    <h3 className="font-display font-bold uppercase tracking-widest text-sm">Datos de Envío</h3>
+                  </div>
+                  
+                  <div className="grid gap-6">
+                    <div className="group border-b border-gray-100 focus-within:border-edax-accent transition-colors">
+                      <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Nombre Completo</label>
+                      <input required className="w-full py-3 text-sm font-display bg-transparent outline-none uppercase" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                    </div>
+                    
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="group border-b border-gray-100 focus-within:border-edax-accent transition-colors">
+                        <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Email</label>
+                        <input required className="w-full py-3 text-sm font-mono bg-transparent outline-none" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                      </div>
+                      <div className="group border-b border-gray-200 focus-within:border-edax-accent transition-colors">
+                        <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Celular</label>
+                        <input required className="w-full py-3 text-sm font-mono bg-transparent outline-none" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 02. MÉTODO DE PAGO */}
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4">
+                    <span className="w-8 h-8 rounded-full bg-edax-primary text-white flex items-center justify-center text-xs font-bold font-mono">02</span>
+                    <h3 className="font-display font-bold uppercase tracking-widest text-sm">Método de Pago NATIVO</h3>
+                  </div>
+                  
+                  <NativePaymentForm 
+                    total={total} 
+                    formData={formData} 
+                    setFormData={setFormData}
+                    cart={cart}
+                    onSuccess={() => {
+                      setCart([]);
+                      navigate('/tienda?status=success');
+                    }}
+                    isProcessing={isProcessing}
+                    setIsProcessing={setIsProcessing}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Columna Derecha: Resumen */}
+          <div className="lg:col-span-5">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="sticky top-32 space-y-6"
+            >
+              <div className="bg-edax-primary text-white p-8">
+                <h3 className="font-display font-bold uppercase tracking-widest text-sm mb-8 border-b border-white/10 pb-4">Resumen de Orden</h3>
+                <div className="space-y-6 max-h-[300px] overflow-y-auto custom-scrollbar pr-2 mb-8">
+                  {cart.map((item: any, i: number) => (
+                    <div key={i} className="flex justify-between gap-4">
+                      <div className="space-y-1">
+                        <p className="text-xs font-bold uppercase tracking-tight">{item.name}</p>
+                        <p className="text-[9px] font-mono opacity-50 uppercase">{item.size} / {item.color}</p>
+                      </div>
+                      <span className="text-xs font-bold">S/ {item.price.toFixed(2)}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-between items-end border-t border-white/20 pt-6">
+                   <div className="space-y-1">
+                      <p className="text-[10px] font-mono opacity-40 uppercase tracking-widest">Total Final</p>
+                      <p className="text-3xl font-display font-bold tracking-tighter text-edax-accent">S/ {total.toFixed(2)}</p>
+                   </div>
+                   <div className="text-[10px] font-mono opacity-40 uppercase text-right">
+                      Incl. IGV
+                   </div>
+                </div>
+              </div>
+
+              <div className="bg-white p-6 border border-edax-border flex items-center gap-4">
+                 <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center text-green-600">
+                    <Zap size={20} />
+                 </div>
+                 <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest">Garantía EDAX</p>
+                    <p className="text-[9px] text-gray-500 uppercase font-mono mt-1">Soporte directo vía comunidad WhatsApp.</p>
+                 </div>
+              </div>
+            </motion.div>
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 }
