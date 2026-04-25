@@ -636,7 +636,7 @@ function Tienda() {
                     disabled={isProcessing}
                     className="w-full bg-edax-accent text-white py-4 font-bold uppercase tracking-widest hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isProcessing ? 'Procesando...' : 'Pagar con Flow'}
+                    {isProcessing ? 'Procesando...' : 'Pagar ahora'}
                   </button>
                 )}
               </div>
