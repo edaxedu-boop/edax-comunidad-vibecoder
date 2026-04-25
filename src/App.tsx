@@ -1015,10 +1015,7 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
       const settings = {
         initialization: {
           preferenceId: preferenceId,
-          amount: total, // Restaurado: Es obligatorio incluso con PreferenceID
-          payer: {
-            email: formData.email,
-          },
+          amount: total,
         },
         customization: {
           paymentMethods: {
