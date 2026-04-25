@@ -42,6 +42,8 @@ export default async function handler(req: any, res: any) {
         pending: `${process.env.APP_URL || 'https://edax.es'}/tienda?status=pending`
       },
       auto_return: 'approved' as const,
+      binary_mode: true,
+      purpose: 'wallet_purchase',
     };
 
     const response = await preference.create({ body });
