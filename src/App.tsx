@@ -885,7 +885,7 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
                 <div className="space-y-8">
                   <div className="flex items-center gap-4">
                     <span className="w-8 h-8 rounded-full bg-edax-primary text-white flex items-center justify-center text-xs font-bold font-mono">02</span>
-                    <h3 className="font-display font-bold uppercase tracking-widest text-sm">Método de Pago NATIVO</h3>
+                    <h3 className="font-display font-bold uppercase tracking-widest text-sm">Seleccionar Pago</h3>
                   </div>
                   
                   <NativePaymentForm 
@@ -1094,21 +1094,20 @@ function NativePaymentForm({ total, formData, setFormData, cart, onSuccess, isPr
         )}
 
         {method === 'yape' && (
-          <div className="space-y-4">
-             <div className="aspect-[16/6] bg-[#742284] flex flex-col items-center justify-center text-white relative overflow-hidden group">
-                <p className="text-[12px] font-bold tracking-[0.3em] uppercase relative z-10">Yape Nativo</p>
-                <p className="text-[8px] font-mono opacity-60 relative z-10">Integration Direct API</p>
-             </div>
+          <div className="space-y-6 pt-4">
              <div className="space-y-4 px-2">
-                <div className="border-b border-gray-200 focus-within:border-[#742284] transition-colors">
-                  <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Celular Yape</label>
+                <div className="border-b border-gray-100 focus-within:border-edax-accent transition-colors">
+                  <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Celular Vinculado a Yape</label>
                   <input required placeholder="900 000 000" className="w-full py-2 text-sm font-mono bg-transparent outline-none" value={yapeData.phone} onChange={e => setYapeData({...yapeData, phone: e.target.value})} />
                 </div>
-                <div className="border-b border-gray-200 focus-within:border-[#742284] transition-colors">
-                  <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Código de Aprobación</label>
+                <div className="border-b border-gray-100 focus-within:border-edax-accent transition-colors">
+                  <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Código de Aprobación (6 dígitos)</label>
                   <input required placeholder="000 000" className="w-full py-2 text-sm font-mono bg-transparent outline-none" value={yapeData.otp} onChange={e => setYapeData({...yapeData, otp: e.target.value.slice(0, 6)})} />
                 </div>
-                <p className="text-[7px] text-gray-400 font-mono uppercase leading-tight italic">* Obtén tu código en el menú "Yape con código" de tu app.</p>
+                <div className="bg-gray-50 p-3 flex items-start gap-3">
+                   <div className="w-1 h-1 rounded-full bg-edax-accent mt-1.5" />
+                   <p className="text-[8px] text-gray-500 font-mono uppercase leading-tight tracking-wider">Obtén el código en tu app Yape: <br/> Menú superior {">"} Yape con código.</p>
+                </div>
              </div>
           </div>
         )}
