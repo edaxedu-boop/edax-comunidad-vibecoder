@@ -992,11 +992,16 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
   }, [total]);
 
   // 2. Inicializar el Brick cuando tengamos el preferenceId
+  const controllerRef = useRef<any>(null);
+
   useEffect(() => {
-    if (!preferenceId) return;
+    if (!preferenceId || !window.MercadoPago) return;
 
     const initBrick = async () => {
-      if (!window.MercadoPago) return;
+      // Limpiar instancia previa si existe
+      if (controllerRef.current) {
+        try { controllerRef.current.unmount(); } catch(e) {}
+      }
 
       const container = document.getElementById(brickContainerId);
       if (container) container.innerHTML = '';
@@ -1012,22 +1017,10 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
           preferenceId: preferenceId,
           payer: {
             email: formData.email,
-            identification: {
-              type: 'DNI',
-              number: '00000000' // Placeholder para forzar visibilidad
-            }
           },
         },
         customization: {
           paymentMethods: {
-            creditCard: "all",
-            debitCard: "all",
-            ticket: "all",
-            bankTransfer: "all",
-            mercadoPago: "all",
-            types: {
-              included: ['credit_card', 'debit_card', 'ticket', 'bank_transfer', 'wallet_topup'],
-            },
             maxInstallments: 1
           },
           visual: {
@@ -1038,13 +1031,11 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
         },
         callbacks: {
           onReady: () => {
-            console.log("Brick con PreferenceID listo");
+            console.log("Payment Brick Ready");
           },
           onSubmit: async ({ selectedPaymentMethod, formData: mpFormData }: any) => {
             setIsProcessing(true);
             try {
-              // Con PreferenceID, el onSubmit puede manejar el pago automáticamente
-              // o podemos enviarlo a nuestro backend de pagos avanzado
               const payload = {
                 ...mpFormData,
                 description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
@@ -1062,13 +1053,13 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
 
               const result = await response.json();
 
-              if (result.status === 'approved' || (result.transaction_details && result.transaction_details.external_resource_url)) {
+              if (result.status === 'approved' || result.status === 'authorized' || (result.transaction_details && result.transaction_details.external_resource_url)) {
                 if (result.transaction_details?.external_resource_url) {
                   window.open(result.transaction_details.external_resource_url, '_blank');
                 }
                 onSuccess();
               } else {
-                throw new Error(result.error || result.message || "Error en el pago");
+                throw new Error(result.error || result.message || "Pago no aprobado");
               }
             } catch (error: any) {
               console.error(error);
@@ -1083,11 +1074,21 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
         },
       };
 
-      await bricksBuilder.create('payment', brickContainerId, settings);
+      try {
+        controllerRef.current = await bricksBuilder.create('payment', brickContainerId, settings);
+      } catch (err) {
+        console.error("Error creating brick:", err);
+      }
     };
 
     initBrick();
-  }, [preferenceId, total]);
+
+    return () => {
+       if (controllerRef.current) {
+         try { controllerRef.current.unmount(); } catch(e) {}
+       }
+    };
+  }, [preferenceId]);
 
   return (
     <div className="animate-in fade-in duration-500 min-h-[400px]">
