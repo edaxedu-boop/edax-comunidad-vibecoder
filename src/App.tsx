@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -165,7 +165,7 @@ function Home() {
                 transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="text-[11vw] lg:text-[6.5vw] font-display font-bold leading-[0.85] tracking-tighter uppercase mb-10"
               >
-                Â¿POR QUÃ‰ <br />
+                Ã‚Â¿POR QUÃƒâ€° <br />
                 UNIRTE <span className="text-edax-accent italic font-light lowercase tracking-normal">a</span> <br />
                 <span className="text-edax-accent">EDAX?</span>
               </motion.h1>
@@ -186,7 +186,7 @@ function Home() {
                   <div className="pr-4">
                     <h3 className="font-mono text-[10px] font-bold uppercase tracking-widest text-edax-accent mb-3">// 02. Red Real</h3>
                     <p className="text-base font-medium leading-relaxed text-gray-900">
-                      Networking presencial en Lima. Conecta con quienes estÃ¡n construyendo el futuro.
+                      Networking presencial en Lima. Conecta con quienes estÃƒÂ¡n construyendo el futuro.
                     </p>
                   </div>
                 </div>
@@ -243,7 +243,7 @@ function Home() {
         <div className="flex whitespace-nowrap animate-marquee font-mono text-[10px] font-bold uppercase tracking-[0.4em]">
           {[...Array(10)].map((_, i) => (
             <span key={i} className="mx-8 flex items-center gap-4">
-              <Plus size={10} /> TALLERES VIRTUALES DOMINGOS 7PM <Plus size={10} /> NETWORKING SÃBADOS <Plus size={10} /> LIMA PERÃš
+              <Plus size={10} /> TALLERES VIRTUALES DOMINGOS 7PM <Plus size={10} /> NETWORKING SÃƒÂBADOS <Plus size={10} /> LIMA PERÃƒÅ¡
             </span>
           ))}
         </div>
@@ -291,7 +291,7 @@ function Home() {
             />
             <GridCard 
               icon={Users}
-              title="ColaboraciÃ³n"
+              title="ColaboraciÃƒÂ³n"
               description="Espacios para compartir conocimiento y aprender en grupo. Crecemos juntos."
             />
             <GridCard 
@@ -311,13 +311,13 @@ function Home() {
             <SectionHeader 
               number="02" 
               title="Presencial" 
-              subtitle="Nos reunimos todos los sÃ¡bados en cafeterÃ­as y espacios colaborativos de Lima." 
+              subtitle="Nos reunimos todos los sÃƒÂ¡bados en cafeterÃƒÂ­as y espacios colaborativos de Lima." 
             />
             <div className="space-y-12 mt-12">
               {[
                 { title: "Networking", desc: "Conecta con otros desarrolladores en un ambiente relajado." },
-                { title: "Dudas TÃ©cnicas", desc: "Resolvemos problemas de cÃ³digo en vivo, cara a cara." },
-                { title: "Crecimiento", desc: "Construye una red de contactos sÃ³lida en la industria local." }
+                { title: "Dudas TÃƒÂ©cnicas", desc: "Resolvemos problemas de cÃƒÂ³digo en vivo, cara a cara." },
+                { title: "Crecimiento", desc: "Construye una red de contactos sÃƒÂ³lida en la industria local." }
               ].map((item, i) => (
                 <div key={i} className="group">
                   <h4 className="font-display font-bold text-2xl uppercase tracking-tight mb-2 group-hover:text-edax-accent transition-colors">
@@ -347,7 +347,7 @@ function Home() {
                 referrerPolicy="no-referrer"
               />
               <div className="absolute -bottom-4 -right-4 bg-edax-primary text-white p-6 font-mono text-[10px] font-bold uppercase tracking-widest">
-                Lima / SÃ¡bados / 2026
+                Lima / SÃƒÂ¡bados / 2026
               </div>
             </div>
           </div>
@@ -360,7 +360,7 @@ function Home() {
           <SectionHeader 
             number="03" 
             title="El Stack" 
-            subtitle="Dominamos las herramientas que estÃ¡n definiendo la prÃ³xima era del desarrollo." 
+            subtitle="Dominamos las herramientas que estÃƒÂ¡n definiendo la prÃƒÂ³xima era del desarrollo." 
           />
           <div className="grid grid-cols-2 md:grid-cols-4 border-l border-t border-edax-border">
             {[
@@ -368,10 +368,10 @@ function Home() {
               { icon: Database, title: "Backend", desc: "Supabase & MongoDB." },
               { icon: Globe, title: "Nube", desc: "Despliegue en AWS & Vercel." },
               { icon: Code2, title: "Herramientas IA", desc: "Cursor & Claude." },
-              { icon: Rocket, title: "Tiendas", desc: "PublicaciÃ³n en Play Store." },
+              { icon: Rocket, title: "Tiendas", desc: "PublicaciÃƒÂ³n en Play Store." },
               { icon: TrendingUp, title: "Marketing", desc: "Estrategia Meta Ads." },
               { icon: Mic2, title: "Habilidades", desc: "Oratoria & Pitching." },
-              { icon: Zap, title: "Negocios", desc: "MonetizaciÃ³n Real." }
+              { icon: Zap, title: "Negocios", desc: "MonetizaciÃƒÂ³n Real." }
             ].map((item, i) => (
               <div key={i} className="p-8 border-r border-b border-edax-border hover:bg-edax-primary hover:text-white transition-all group">
                 <item.icon className="mb-8 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
@@ -426,7 +426,7 @@ function Home() {
                 referrerPolicy="no-referrer"
               />
               <div className="absolute bottom-4 left-4 bg-white px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest">
-                Networking / CafeterÃ­a
+                Networking / CafeterÃƒÂ­a
               </div>
             </motion.div>
 
@@ -440,7 +440,7 @@ function Home() {
             >
               <img 
                 src="/images/img4.png" 
-                alt="ColaboraciÃ³n" 
+                alt="ColaboraciÃƒÂ³n" 
                 className="w-full h-full object-cover grayscale-0 transition-all duration-700 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
@@ -484,13 +484,13 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
   const [gorraColor, setGorraColor] = useState('Negro');
 
   useEffect(() => {
-    // Detectar Ã©xito al retornar de Mercado Pago
+    // Detectar ÃƒÂ©xito al retornar de Mercado Pago
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.get('status') === 'success') {
-      alert("Â¡Pago realizado con Ã©xito! Tu orden ha sido confirmada.");
+      alert("Ã‚Â¡Pago realizado con ÃƒÂ©xito! Tu orden ha sido confirmada.");
       setCart([]);
       setIsCartOpen(false);
-      // Limpiar parÃ¡metros de la URL sin recargar
+      // Limpiar parÃƒÂ¡metros de la URL sin recargar
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, []);
@@ -542,7 +542,7 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
                 {cart.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
                     <ShoppingCart size={48} className="text-gray-200" />
-                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-[0.2em]">El carrito estÃ¡ vacÃ­o</p>
+                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-[0.2em]">El carrito estÃƒÂ¡ vacÃƒÂ­o</p>
                   </div>
                 ) : (
                   <div className="space-y-6">
@@ -583,7 +583,7 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
           <SectionHeader 
             number="05" 
             title="Tienda" 
-            subtitle="Viste el cÃ³digo. Expresa tu vibe." 
+            subtitle="Viste el cÃƒÂ³digo. Expresa tu vibe." 
           />
           <div className="grid md:grid-cols-2 border-l border-t border-edax-border">
             {/* Producto 1 */}
@@ -598,7 +598,7 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-display font-bold text-2xl uppercase tracking-tight">Polo Vibecoder</h3>
-                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-widest mt-1">AlgodÃ³n Premium / Oversize</p>
+                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-widest mt-1">AlgodÃƒÂ³n Premium / Oversize</p>
                   </div>
                   <span className="font-display font-bold text-2xl text-edax-accent">S/ 45.00</span>
                 </div>
@@ -622,7 +622,7 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
                 onClick={() => addToCart({id: 'polo', name: 'Polo Vibecoder', price: 45, size: poloSize, color: poloColor})}
                 className="w-full btn-primary py-4 text-sm tracking-widest flex items-center justify-center gap-3 uppercase font-bold group-hover:bg-edax-accent"
               >
-                AÃ‘ADIR AL CARRITO <ShoppingCart size={16} />
+                AÃƒâ€˜ADIR AL CARRITO <ShoppingCart size={16} />
               </button>
             </div>
 
@@ -643,8 +643,8 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Talla</label>
-                    <select className="w-full border border-gray-300 p-2 text-xs uppercase bg-gray-100 cursor-not-allowed text-gray-400" disabled value="EstÃ¡ndar">
-                      <option value="EstÃ¡ndar">EstÃ¡ndar</option>
+                    <select className="w-full border border-gray-300 p-2 text-xs uppercase bg-gray-100 cursor-not-allowed text-gray-400" disabled value="EstÃƒÂ¡ndar">
+                      <option value="EstÃƒÂ¡ndar">EstÃƒÂ¡ndar</option>
                     </select>
                   </div>
                   <div>
@@ -656,10 +656,10 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
                 </div>
               </div>
               <button 
-                onClick={() => addToCart({id: 'gorra', name: 'Gorra Edax', price: 35, size: 'EstÃ¡ndar', color: gorraColor})}
+                onClick={() => addToCart({id: 'gorra', name: 'Gorra Edax', price: 35, size: 'EstÃƒÂ¡ndar', color: gorraColor})}
                 className="w-full btn-primary py-4 text-sm tracking-widest flex items-center justify-center gap-3 uppercase font-bold group-hover:bg-edax-accent"
               >
-                AÃ‘ADIR AL CARRITO <ShoppingCart size={16} />
+                AÃƒâ€˜ADIR AL CARRITO <ShoppingCart size={16} />
               </button>
             </div>
           </div>
@@ -761,7 +761,7 @@ export default function App() {
       <section className="bg-edax-primary text-white py-16">
   <div className="max-w-[1360px] mx-auto px-6 text-center">
           <h2 className="text-[10vw] font-display font-bold leading-none tracking-tighter uppercase mb-12">
-            Ãšnete al<br />
+            ÃƒÅ¡nete al<br />
             Movimiento
           </h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -786,7 +786,7 @@ export default function App() {
           <div>
             <span className="font-display font-bold text-4xl tracking-tighter uppercase mb-4 block">EDAX</span>
             <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-gray-400">
-              Comunidad Vibecoder / Lima PerÃº / 2026
+              Comunidad Vibecoder / Lima PerÃƒÂº / 2026
             </p>
           </div>
           <div className="grid grid-cols-2 gap-12">
@@ -854,11 +854,11 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
               <h2 className="text-4xl font-display font-bold uppercase tracking-tighter mb-12">Finalizar Compra</h2>
 
               <div className="space-y-12">
-                {/* 01. DATOS DE ENVÃO */}
+                {/* 01. DATOS DE ENVÃƒÂO */}
                 <div className="space-y-8">
                   <div className="flex items-center gap-4">
                     <span className="w-8 h-8 rounded-full bg-edax-primary text-white flex items-center justify-center text-xs font-bold font-mono">01</span>
-                    <h3 className="font-display font-bold uppercase tracking-widest text-sm">Datos de EnvÃ­o</h3>
+                    <h3 className="font-display font-bold uppercase tracking-widest text-sm">Datos de EnvÃƒÂ­o</h3>
                   </div>
                   
                   <div className="grid gap-6">
@@ -880,7 +880,7 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
                   </div>
                 </div>
 
-                {/* 02. MÃ‰TODO DE PAGO */}
+                {/* 02. MÃƒâ€°TODO DE PAGO */}
                 <div className="space-y-8">
                   <div className="flex items-center gap-4">
                     <span className="w-8 h-8 rounded-full bg-edax-primary text-white flex items-center justify-center text-xs font-bold font-mono">02</span>
@@ -941,13 +941,12 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
                     <Zap size={20} />
                  </div>
                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest">GarantÃ­a EDAX</p>
-                    <p className="text-[9px] text-gray-500 uppercase font-mono mt-1">Soporte directo vÃ­a comunidad WhatsApp.</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest">GarantÃƒÂ­a EDAX</p>
+                    <p className="text-[9px] text-gray-500 uppercase font-mono mt-1">Soporte directo vÃƒÂ­a comunidad WhatsApp.</p>
                  </div>
               </div>
             </motion.div>
           </div>
-
         </div>
       </div>
     </div>
@@ -955,172 +954,119 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
 }
 
 // ==========================================
-// COMPONENTE DE PAGO - CHECKOUT BRICKS (PERU)
-// Payment Brick con preferenceId
-// Muestra: Tarjeta, Yape, PagoEfectivo, MP Wallet
+// COMPONENTE DE PAGO - CHECKOUT PRO (REDIRECT)
+// Redirige a la página oficial de Mercado Pago
+// Garantiza que salgan Yape y PagoEfectivo
 // ==========================================
-function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, setIsProcessing }: any) {
-  const BRICK_CONTAINER = 'paymentBrick_container';
-  const [preferenceId, setPreferenceId] = useState<string | null>(null);
-  const [loadingPref, setLoadingPref] = useState(true);
-  const [prefError, setPrefError] = useState<string | null>(null);
-  const controllerRef = useRef<any>(null);
+function NativePaymentForm({ total, formData, cart, isProcessing, setIsProcessing }: any) {
+  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const [loadingUrl, setLoadingUrl] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // 1. Crear preferencia en el backend
   useEffect(() => {
-    const createPref = async () => {
-      setLoadingPref(true);
-      setPrefError(null);
+    const fetchCheckoutUrl = async () => {
+      setLoadingUrl(true);
+      setError(null);
       try {
-        const res = await fetch('/api/create-preference', {
+        const response = await fetch('/api/create-preference', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             amount: total,
             description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
             items: cart.map((item: any) => ({
-              title: item.name,
-              unit_price: item.price,
-              quantity: item.quantity || 1,
-              currency_id: 'PEN',
+               title: item.name,
+               unit_price: item.price,
+               quantity: item.quantity || 1,
+               currency_id: 'PEN'
             })),
-          }),
+            payer_email: formData.email,
+            payer_name: formData.name,
+          })
         });
-        const data = await res.json();
+        const data = await response.json();
+        
+        // init_point es la URL de Checkout Pro
         if (data.id) {
-          setPreferenceId(data.id);
+          // Si el backend no devuelve init_point, lo armamos
+          const url = data.init_point || `https://www.mercadopago.com.pe/checkout/v1/redirect?pref_id=${data.id}`;
+          setCheckoutUrl(url);
         } else {
-          setPrefError(data.error || 'No se pudo preparar el pago.');
+          setError('No se pudo obtener la URL de pago.');
         }
-      } catch (e) {
-        setPrefError('Error de conexiÃ³n con el servidor.');
+      } catch (err: any) {
+        setError('Error al conectar con el servidor de pagos.');
       } finally {
-        setLoadingPref(false);
+        setLoadingUrl(false);
       }
     };
-    createPref();
-  }, [total]);
+    if (total > 0) fetchCheckoutUrl();
+  }, [total, formData.email, cart, formData.name]);
 
-  // 2. Montar el Payment Brick cuando tengamos el preferenceId
-  useEffect(() => {
-    if (!preferenceId || !window.MercadoPago) return;
+  const handlePagar = () => {
+    if (!checkoutUrl) return;
+    setIsProcessing(true);
+    // Redirigir a la pasarela de Mercado Pago (Checkout Pro)
+    window.location.href = checkoutUrl;
+  };
 
-    const mountBrick = async () => {
-      // Desmontar instancia anterior si existe
-      if (controllerRef.current) {
-        try { controllerRef.current.unmount(); } catch (_) {}
-        controllerRef.current = null;
-      }
-      const container = document.getElementById(BRICK_CONTAINER);
-      if (container) container.innerHTML = '';
-
-      const mp = new window.MercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: 'es-PE' });
-
-      try {
-        controllerRef.current = await mp.bricks().create('payment', BRICK_CONTAINER, {
-          initialization: {
-            amount: total,
-            preferenceId,
-          },
-          customization: {
-            paymentMethods: {
-              ticket: 'all',          // PagoEfectivo
-              creditCard: 'all',
-              debitCard: 'all',
-              prepaidCard: 'all',
-              mercadoPago: 'all',     // Yape + Wallet MP
-              maxInstallments: 1,
-            },
-            visual: { style: { theme: 'default' } },
-          },
-          callbacks: {
-            onReady: () => console.log('[Brick] Listo'),
-            onError: (err: any) => console.error('[Brick] Error:', err),
-            onSubmit: async ({ selectedPaymentMethod, formData: mpFormData }: any) => {
-              setIsProcessing(true);
-              try {
-                const res = await fetch('/api/create-payment', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    ...mpFormData,
-                    description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
-                    payer_name: formData.name,
-                    payer_phone: formData.phone,
-                    cart,
-                  }),
-                });
-                const result = await res.json();
-                if (
-                  result.status === 'approved' ||
-                  result.status === 'authorized' ||
-                  result.status === 'pending'
-                ) {
-                  if (result.transaction_details?.external_resource_url) {
-                    window.open(result.transaction_details.external_resource_url, '_blank');
-                  }
-                  onSuccess();
-                } else {
-                  throw new Error(result.message || result.error || 'Pago no aprobado');
-                }
-              } catch (err: any) {
-                alert(err.message || 'Error al procesar el pago.');
-              } finally {
-                setIsProcessing(false);
-              }
-            },
-          },
-        });
-      } catch (err) {
-        console.error('[Brick] No se pudo crear:', err);
-      }
-    };
-
-    mountBrick();
-
-    return () => {
-      if (controllerRef.current) {
-        try { controllerRef.current.unmount(); } catch (_) {}
-        controllerRef.current = null;
-      }
-    };
-  }, [preferenceId]);
-
-  if (loadingPref) {
+  if (loadingUrl) {
     return (
       <div className="flex flex-col items-center justify-center h-40 gap-4">
         <div className="w-8 h-8 border-2 border-edax-accent border-t-transparent rounded-full animate-spin" />
-        <p className="font-mono text-[10px] uppercase tracking-widest text-gray-400">Preparando mÃ©todos de pago...</p>
+        <p className="font-mono text-[10px] uppercase tracking-widest text-gray-400">Preparando pago seguro...</p>
       </div>
     );
   }
 
-  if (prefError) {
+  if (error) {
     return (
       <div className="border border-red-200 bg-red-50 p-6 text-center space-y-3">
         <p className="text-red-600 text-xs font-bold uppercase tracking-widest">Error al cargar pago</p>
-        <p className="text-red-400 text-[10px] font-mono">{prefError}</p>
-        <button onClick={() => window.location.reload()} className="text-[10px] underline text-red-500">
-          Reintentar
+        <p className="text-red-400 text-[10px] font-mono">{error}</p>
+        <button onClick={() => window.location.reload()} className="text-[10px] underline text-red-500 hover:text-red-700">
+          Intentar de nuevo
         </button>
       </div>
     );
   }
 
   return (
-    <div className="animate-in fade-in duration-500">
-      {isProcessing && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] flex items-center justify-center">
-          <div className="bg-white p-10 shadow-2xl flex flex-col items-center gap-6">
-            <div className="w-12 h-12 border-4 border-edax-accent border-t-transparent rounded-full animate-spin" />
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-edax-primary">
-              Procesando pago...
-            </p>
+    <div className="space-y-6 animate-in fade-in duration-500">
+      {/* Info de mÃ©todos disponibles */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: 'Tarjeta', icon: 'ðŸ’³' },
+          { label: 'Yape', icon: 'ðŸ“±' },
+          { label: 'PagoEfectivo', icon: 'ðŸ¦' },
+        ].map((m) => (
+          <div key={m.label} className="border border-gray-100 p-3 text-center space-y-1">
+            <div className="text-xl">{m.icon}</div>
+            <p className="text-[9px] font-bold uppercase tracking-widest text-gray-500">{m.label}</p>
           </div>
-        </div>
-      )}
-      <div id={BRICK_CONTAINER} />
+        ))}
+      </div>
+
+      <div className="bg-gray-50 border border-gray-100 p-4 space-y-1">
+        <p className="text-[9px] font-bold uppercase tracking-widest text-gray-400">
+          ðŸ’¡ SerÃ¡s redirigido a la pÃ¡gina segura de Mercado Pago. AhÃ­ podrÃ¡s elegir Yape, PagoEfectivo o Tarjeta.
+        </p>
+      </div>
+
+      <button
+        onClick={handlePagar}
+        disabled={isProcessing || !checkoutUrl}
+        className="w-full bg-edax-primary text-white py-5 font-bold uppercase tracking-[0.2em] text-[11px] hover:bg-edax-accent transition-all disabled:opacity-50 flex items-center justify-center gap-3 group"
+      >
+        {isProcessing
+          ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+          : <>CONTINUAR AL PAGO S/ {total.toFixed(2)}</>
+        }
+      </button>
+
+      <p className="text-center text-[8px] font-mono text-gray-300 uppercase tracking-widest">
+        ðŸ”’ Pago 100% seguro Â· Procesado por Mercado Pago
+      </p>
     </div>
   );
 }
-
