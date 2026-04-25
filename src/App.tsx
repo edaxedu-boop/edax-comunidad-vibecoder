@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -165,7 +165,7 @@ function Home() {
                 transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="text-[11vw] lg:text-[6.5vw] font-display font-bold leading-[0.85] tracking-tighter uppercase mb-10"
               >
-                ¿POR QUÉ <br />
+                Â¿POR QUÃ‰ <br />
                 UNIRTE <span className="text-edax-accent italic font-light lowercase tracking-normal">a</span> <br />
                 <span className="text-edax-accent">EDAX?</span>
               </motion.h1>
@@ -186,7 +186,7 @@ function Home() {
                   <div className="pr-4">
                     <h3 className="font-mono text-[10px] font-bold uppercase tracking-widest text-edax-accent mb-3">// 02. Red Real</h3>
                     <p className="text-base font-medium leading-relaxed text-gray-900">
-                      Networking presencial en Lima. Conecta con quienes están construyendo el futuro.
+                      Networking presencial en Lima. Conecta con quienes estÃ¡n construyendo el futuro.
                     </p>
                   </div>
                 </div>
@@ -243,7 +243,7 @@ function Home() {
         <div className="flex whitespace-nowrap animate-marquee font-mono text-[10px] font-bold uppercase tracking-[0.4em]">
           {[...Array(10)].map((_, i) => (
             <span key={i} className="mx-8 flex items-center gap-4">
-              <Plus size={10} /> TALLERES VIRTUALES DOMINGOS 7PM <Plus size={10} /> NETWORKING SÁBADOS <Plus size={10} /> LIMA PERÚ
+              <Plus size={10} /> TALLERES VIRTUALES DOMINGOS 7PM <Plus size={10} /> NETWORKING SÃBADOS <Plus size={10} /> LIMA PERÃš
             </span>
           ))}
         </div>
@@ -291,7 +291,7 @@ function Home() {
             />
             <GridCard 
               icon={Users}
-              title="Colaboración"
+              title="ColaboraciÃ³n"
               description="Espacios para compartir conocimiento y aprender en grupo. Crecemos juntos."
             />
             <GridCard 
@@ -311,13 +311,13 @@ function Home() {
             <SectionHeader 
               number="02" 
               title="Presencial" 
-              subtitle="Nos reunimos todos los sábados en cafeterías y espacios colaborativos de Lima." 
+              subtitle="Nos reunimos todos los sÃ¡bados en cafeterÃ­as y espacios colaborativos de Lima." 
             />
             <div className="space-y-12 mt-12">
               {[
                 { title: "Networking", desc: "Conecta con otros desarrolladores en un ambiente relajado." },
-                { title: "Dudas Técnicas", desc: "Resolvemos problemas de código en vivo, cara a cara." },
-                { title: "Crecimiento", desc: "Construye una red de contactos sólida en la industria local." }
+                { title: "Dudas TÃ©cnicas", desc: "Resolvemos problemas de cÃ³digo en vivo, cara a cara." },
+                { title: "Crecimiento", desc: "Construye una red de contactos sÃ³lida en la industria local." }
               ].map((item, i) => (
                 <div key={i} className="group">
                   <h4 className="font-display font-bold text-2xl uppercase tracking-tight mb-2 group-hover:text-edax-accent transition-colors">
@@ -347,7 +347,7 @@ function Home() {
                 referrerPolicy="no-referrer"
               />
               <div className="absolute -bottom-4 -right-4 bg-edax-primary text-white p-6 font-mono text-[10px] font-bold uppercase tracking-widest">
-                Lima / Sábados / 2026
+                Lima / SÃ¡bados / 2026
               </div>
             </div>
           </div>
@@ -360,7 +360,7 @@ function Home() {
           <SectionHeader 
             number="03" 
             title="El Stack" 
-            subtitle="Dominamos las herramientas que están definiendo la próxima era del desarrollo." 
+            subtitle="Dominamos las herramientas que estÃ¡n definiendo la prÃ³xima era del desarrollo." 
           />
           <div className="grid grid-cols-2 md:grid-cols-4 border-l border-t border-edax-border">
             {[
@@ -368,10 +368,10 @@ function Home() {
               { icon: Database, title: "Backend", desc: "Supabase & MongoDB." },
               { icon: Globe, title: "Nube", desc: "Despliegue en AWS & Vercel." },
               { icon: Code2, title: "Herramientas IA", desc: "Cursor & Claude." },
-              { icon: Rocket, title: "Tiendas", desc: "Publicación en Play Store." },
+              { icon: Rocket, title: "Tiendas", desc: "PublicaciÃ³n en Play Store." },
               { icon: TrendingUp, title: "Marketing", desc: "Estrategia Meta Ads." },
               { icon: Mic2, title: "Habilidades", desc: "Oratoria & Pitching." },
-              { icon: Zap, title: "Negocios", desc: "Monetización Real." }
+              { icon: Zap, title: "Negocios", desc: "MonetizaciÃ³n Real." }
             ].map((item, i) => (
               <div key={i} className="p-8 border-r border-b border-edax-border hover:bg-edax-primary hover:text-white transition-all group">
                 <item.icon className="mb-8 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
@@ -426,7 +426,7 @@ function Home() {
                 referrerPolicy="no-referrer"
               />
               <div className="absolute bottom-4 left-4 bg-white px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest">
-                Networking / Cafetería
+                Networking / CafeterÃ­a
               </div>
             </motion.div>
 
@@ -440,7 +440,7 @@ function Home() {
             >
               <img 
                 src="/images/img4.png" 
-                alt="Colaboración" 
+                alt="ColaboraciÃ³n" 
                 className="w-full h-full object-cover grayscale-0 transition-all duration-700 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
@@ -484,13 +484,13 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
   const [gorraColor, setGorraColor] = useState('Negro');
 
   useEffect(() => {
-    // Detectar éxito al retornar de Mercado Pago
+    // Detectar Ã©xito al retornar de Mercado Pago
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.get('status') === 'success') {
-      alert("¡Pago realizado con éxito! Tu orden ha sido confirmada.");
+      alert("Â¡Pago realizado con Ã©xito! Tu orden ha sido confirmada.");
       setCart([]);
       setIsCartOpen(false);
-      // Limpiar parámetros de la URL sin recargar
+      // Limpiar parÃ¡metros de la URL sin recargar
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, []);
@@ -542,7 +542,7 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
                 {cart.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
                     <ShoppingCart size={48} className="text-gray-200" />
-                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-[0.2em]">El carrito está vacío</p>
+                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-[0.2em]">El carrito estÃ¡ vacÃ­o</p>
                   </div>
                 ) : (
                   <div className="space-y-6">
@@ -583,7 +583,7 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
           <SectionHeader 
             number="05" 
             title="Tienda" 
-            subtitle="Viste el código. Expresa tu vibe." 
+            subtitle="Viste el cÃ³digo. Expresa tu vibe." 
           />
           <div className="grid md:grid-cols-2 border-l border-t border-edax-border">
             {/* Producto 1 */}
@@ -598,7 +598,7 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-display font-bold text-2xl uppercase tracking-tight">Polo Vibecoder</h3>
-                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-widest mt-1">Algodón Premium / Oversize</p>
+                    <p className="text-gray-500 font-mono text-[10px] uppercase tracking-widest mt-1">AlgodÃ³n Premium / Oversize</p>
                   </div>
                   <span className="font-display font-bold text-2xl text-edax-accent">S/ 45.00</span>
                 </div>
@@ -622,7 +622,7 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
                 onClick={() => addToCart({id: 'polo', name: 'Polo Vibecoder', price: 45, size: poloSize, color: poloColor})}
                 className="w-full btn-primary py-4 text-sm tracking-widest flex items-center justify-center gap-3 uppercase font-bold group-hover:bg-edax-accent"
               >
-                AÑADIR AL CARRITO <ShoppingCart size={16} />
+                AÃ‘ADIR AL CARRITO <ShoppingCart size={16} />
               </button>
             </div>
 
@@ -643,8 +643,8 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Talla</label>
-                    <select className="w-full border border-gray-300 p-2 text-xs uppercase bg-gray-100 cursor-not-allowed text-gray-400" disabled value="Estándar">
-                      <option value="Estándar">Estándar</option>
+                    <select className="w-full border border-gray-300 p-2 text-xs uppercase bg-gray-100 cursor-not-allowed text-gray-400" disabled value="EstÃ¡ndar">
+                      <option value="EstÃ¡ndar">EstÃ¡ndar</option>
                     </select>
                   </div>
                   <div>
@@ -656,10 +656,10 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
                 </div>
               </div>
               <button 
-                onClick={() => addToCart({id: 'gorra', name: 'Gorra Edax', price: 35, size: 'Estándar', color: gorraColor})}
+                onClick={() => addToCart({id: 'gorra', name: 'Gorra Edax', price: 35, size: 'EstÃ¡ndar', color: gorraColor})}
                 className="w-full btn-primary py-4 text-sm tracking-widest flex items-center justify-center gap-3 uppercase font-bold group-hover:bg-edax-accent"
               >
-                AÑADIR AL CARRITO <ShoppingCart size={16} />
+                AÃ‘ADIR AL CARRITO <ShoppingCart size={16} />
               </button>
             </div>
           </div>
@@ -761,7 +761,7 @@ export default function App() {
       <section className="bg-edax-primary text-white py-16">
   <div className="max-w-[1360px] mx-auto px-6 text-center">
           <h2 className="text-[10vw] font-display font-bold leading-none tracking-tighter uppercase mb-12">
-            Únete al<br />
+            Ãšnete al<br />
             Movimiento
           </h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -786,7 +786,7 @@ export default function App() {
           <div>
             <span className="font-display font-bold text-4xl tracking-tighter uppercase mb-4 block">EDAX</span>
             <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-gray-400">
-              Comunidad Vibecoder / Lima Perú / 2026
+              Comunidad Vibecoder / Lima PerÃº / 2026
             </p>
           </div>
           <div className="grid grid-cols-2 gap-12">
@@ -854,11 +854,11 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
               <h2 className="text-4xl font-display font-bold uppercase tracking-tighter mb-12">Finalizar Compra</h2>
 
               <div className="space-y-12">
-                {/* 01. DATOS DE ENVÍO */}
+                {/* 01. DATOS DE ENVÃO */}
                 <div className="space-y-8">
                   <div className="flex items-center gap-4">
                     <span className="w-8 h-8 rounded-full bg-edax-primary text-white flex items-center justify-center text-xs font-bold font-mono">01</span>
-                    <h3 className="font-display font-bold uppercase tracking-widest text-sm">Datos de Envío</h3>
+                    <h3 className="font-display font-bold uppercase tracking-widest text-sm">Datos de EnvÃ­o</h3>
                   </div>
                   
                   <div className="grid gap-6">
@@ -880,7 +880,7 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
                   </div>
                 </div>
 
-                {/* 02. MÉTODO DE PAGO */}
+                {/* 02. MÃ‰TODO DE PAGO */}
                 <div className="space-y-8">
                   <div className="flex items-center gap-4">
                     <span className="w-8 h-8 rounded-full bg-edax-primary text-white flex items-center justify-center text-xs font-bold font-mono">02</span>
@@ -941,8 +941,8 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
                     <Zap size={20} />
                  </div>
                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest">Garantía EDAX</p>
-                    <p className="text-[9px] text-gray-500 uppercase font-mono mt-1">Soporte directo vía comunidad WhatsApp.</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest">GarantÃ­a EDAX</p>
+                    <p className="text-[9px] text-gray-500 uppercase font-mono mt-1">Soporte directo vÃ­a comunidad WhatsApp.</p>
                  </div>
               </div>
             </motion.div>
@@ -955,316 +955,172 @@ function Checkout({ cart, setCart, formData, setFormData }: any) {
 }
 
 // ==========================================
-// COMPONENTE DE PAGO - CHECKOUT API (PERU)
-// Soporta: Tarjeta (CardForm), Yape (OTP), PagoEfectivo (CIP)
-// Según documentación oficial MP Perú
+// COMPONENTE DE PAGO - CHECKOUT BRICKS (PERU)
+// Payment Brick con preferenceId
+// Muestra: Tarjeta, Yape, PagoEfectivo, MP Wallet
 // ==========================================
 function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, setIsProcessing }: any) {
-  const [method, setMethod] = useState<'card' | 'yape' | 'pagoefectivo'>('card');
-  const [yapPhone, setYapPhone] = useState('');
-  const [yapOTP, setYapOTP] = useState('');
-  const [cipUrl, setCipUrl] = useState<string | null>(null);
-  const [msg, setMsg] = useState<string | null>(null);
-  const cardFormRef = useRef<any>(null);
+  const BRICK_CONTAINER = 'paymentBrick_container';
+  const [preferenceId, setPreferenceId] = useState<string | null>(null);
+  const [loadingPref, setLoadingPref] = useState(true);
+  const [prefError, setPrefError] = useState<string | null>(null);
+  const controllerRef = useRef<any>(null);
 
-  // Inicializar CardForm cuando se selecciona tarjeta
+  // 1. Crear preferencia en el backend
   useEffect(() => {
-    if (method !== 'card' || !window.MercadoPago) return;
-
-    // Pequeño delay para que el DOM esté listo
-    const timer = setTimeout(() => {
-      const mp = new window.MercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: 'es-PE' });
-
-      if (cardFormRef.current) {
-        try { cardFormRef.current.unmount(); } catch(e) {}
-      }
-
-      cardFormRef.current = mp.cardForm({
-        amount: String(total),
-        iframe: true,
-        form: {
-          id: 'mp-card-form',
-          cardNumber: { id: 'mp-cardNumber', placeholder: 'Número de tarjeta' },
-          expirationDate: { id: 'mp-expiration', placeholder: 'MM/AA' },
-          securityCode: { id: 'mp-cvv', placeholder: 'CVV' },
-          cardholderName: { id: 'mp-cardHolder', placeholder: 'Titular de la tarjeta' },
-          installments: { id: 'mp-installments' },
-          identificationType: { id: 'mp-docType' },
-          identificationNumber: { id: 'mp-docNumber', placeholder: 'Número de documento' },
-          cardholderEmail: { id: 'mp-email' },
-        },
-        callbacks: {
-          onFormMounted: (err: any) => { if (err) console.error('CardForm error:', err); },
-          onSubmit: async (e: any) => {
-            e.preventDefault();
-            setIsProcessing(true);
-            setMsg(null);
-            const { paymentMethodId, token, issuerId, cardholderEmail, amount, installments, identificationType, identificationNumber } = cardFormRef.current.getCardFormData();
-            try {
-              const res = await fetch('/api/create-payment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  token, issuer_id: issuerId, payment_method_id: paymentMethodId,
-                  transaction_amount: Number(amount), installments: Number(installments),
-                  description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
-                  payer: { email: cardholderEmail || formData.email, identification: { type: identificationType, number: identificationNumber } },
-                  cart, name: formData.name, phone: formData.phone,
-                })
-              });
-              const result = await res.json();
-              if (result.status === 'approved' || result.status === 'authorized') {
-                onSuccess();
-              } else {
-                setMsg(result.message || result.error || 'Pago no aprobado. Verifica tus datos.');
-              }
-            } catch(err: any) {
-              setMsg('Error de conexión. Intenta de nuevo.');
-            } finally {
-              setIsProcessing(false);
-            }
-          },
-          onFetching: (resource: any) => {
-            const progressBar = document.querySelector('.progress-bar');
-            if (progressBar) progressBar.setAttribute('value', '0');
-            return () => { if (progressBar) progressBar.setAttribute('value', '0'); };
-          }
+    const createPref = async () => {
+      setLoadingPref(true);
+      setPrefError(null);
+      try {
+        const res = await fetch('/api/create-preference', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: total,
+            description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
+            items: cart.map((item: any) => ({
+              title: item.name,
+              unit_price: item.price,
+              quantity: item.quantity || 1,
+              currency_id: 'PEN',
+            })),
+          }),
+        });
+        const data = await res.json();
+        if (data.id) {
+          setPreferenceId(data.id);
+        } else {
+          setPrefError(data.error || 'No se pudo preparar el pago.');
         }
-      });
-    }, 300);
-
-    return () => {
-      clearTimeout(timer);
-      if (cardFormRef.current) {
-        try { cardFormRef.current.unmount(); } catch(e) {}
+      } catch (e) {
+        setPrefError('Error de conexiÃ³n con el servidor.');
+      } finally {
+        setLoadingPref(false);
       }
     };
-  }, [method, total]);
+    createPref();
+  }, [total]);
 
-  // Pago con Yape
-  const handleYapePay = async () => {
-    if (!yapPhone || !yapOTP) { setMsg('Ingresa tu celular y OTP de Yape.'); return; }
-    if (!window.MercadoPago) { setMsg('SDK no cargado.'); return; }
-    setIsProcessing(true);
-    setMsg(null);
-    try {
+  // 2. Montar el Payment Brick cuando tengamos el preferenceId
+  useEffect(() => {
+    if (!preferenceId || !window.MercadoPago) return;
+
+    const mountBrick = async () => {
+      // Desmontar instancia anterior si existe
+      if (controllerRef.current) {
+        try { controllerRef.current.unmount(); } catch (_) {}
+        controllerRef.current = null;
+      }
+      const container = document.getElementById(BRICK_CONTAINER);
+      if (container) container.innerHTML = '';
+
       const mp = new window.MercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: 'es-PE' });
-      const yape = (mp as any).yape({ otp: yapOTP, phoneNumber: yapPhone });
-      const yapeToken = await yape.create();
 
-      const res = await fetch('/api/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token: yapeToken.id,
-          payment_method_id: 'yape',
-          transaction_amount: total,
-          installments: 1,
-          description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
-          payer: { email: formData.email },
-          cart, name: formData.name, phone: formData.phone,
-        })
-      });
-      const result = await res.json();
-      if (result.status === 'approved' || result.status === 'accredited') {
-        onSuccess();
-      } else {
-        setMsg(result.message || result.error || 'Yape no aprobado. Verifica el OTP.');
+      try {
+        controllerRef.current = await mp.bricks().create('payment', BRICK_CONTAINER, {
+          initialization: {
+            amount: total,
+            preferenceId,
+          },
+          customization: {
+            paymentMethods: {
+              ticket: 'all',          // PagoEfectivo
+              creditCard: 'all',
+              debitCard: 'all',
+              prepaidCard: 'all',
+              mercadoPago: 'all',     // Yape + Wallet MP
+              maxInstallments: 1,
+            },
+            visual: { style: { theme: 'default' } },
+          },
+          callbacks: {
+            onReady: () => console.log('[Brick] Listo'),
+            onError: (err: any) => console.error('[Brick] Error:', err),
+            onSubmit: async ({ selectedPaymentMethod, formData: mpFormData }: any) => {
+              setIsProcessing(true);
+              try {
+                const res = await fetch('/api/create-payment', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    ...mpFormData,
+                    description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
+                    payer_name: formData.name,
+                    payer_phone: formData.phone,
+                    cart,
+                  }),
+                });
+                const result = await res.json();
+                if (
+                  result.status === 'approved' ||
+                  result.status === 'authorized' ||
+                  result.status === 'pending'
+                ) {
+                  if (result.transaction_details?.external_resource_url) {
+                    window.open(result.transaction_details.external_resource_url, '_blank');
+                  }
+                  onSuccess();
+                } else {
+                  throw new Error(result.message || result.error || 'Pago no aprobado');
+                }
+              } catch (err: any) {
+                alert(err.message || 'Error al procesar el pago.');
+              } finally {
+                setIsProcessing(false);
+              }
+            },
+          },
+        });
+      } catch (err) {
+        console.error('[Brick] No se pudo crear:', err);
       }
-    } catch(err: any) {
-      setMsg(err?.message || 'Error al procesar Yape.');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+    };
 
-  // Pago con PagoEfectivo
-  const handlePagoEfectivo = async () => {
-    setIsProcessing(true);
-    setMsg(null);
-    try {
-      const res = await fetch('/api/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          payment_method_id: 'pagoefectivo_atm',
-          transaction_amount: total,
-          installments: 1,
-          description: `EDAX Merch - ${cart.map((i: any) => i.name).join(', ')}`,
-          payer: { email: formData.email },
-          cart, name: formData.name, phone: formData.phone,
-        })
-      });
-      const result = await res.json();
-      if (result.transaction_details?.external_resource_url) {
-        setCipUrl(result.transaction_details.external_resource_url);
-      } else {
-        setMsg(result.error || 'Error al generar código PagoEfectivo.');
+    mountBrick();
+
+    return () => {
+      if (controllerRef.current) {
+        try { controllerRef.current.unmount(); } catch (_) {}
+        controllerRef.current = null;
       }
-    } catch(err: any) {
-      setMsg('Error de conexión.');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+    };
+  }, [preferenceId]);
 
-  // Tabs
-  const tabs = [
-    { id: 'card', label: '💳 Tarjeta' },
-    { id: 'yape', label: '📱 Yape' },
-    { id: 'pagoefectivo', label: '🏦 PagoEfectivo' },
-  ] as const;
+  if (loadingPref) {
+    return (
+      <div className="flex flex-col items-center justify-center h-40 gap-4">
+        <div className="w-8 h-8 border-2 border-edax-accent border-t-transparent rounded-full animate-spin" />
+        <p className="font-mono text-[10px] uppercase tracking-widest text-gray-400">Preparando mÃ©todos de pago...</p>
+      </div>
+    );
+  }
+
+  if (prefError) {
+    return (
+      <div className="border border-red-200 bg-red-50 p-6 text-center space-y-3">
+        <p className="text-red-600 text-xs font-bold uppercase tracking-widest">Error al cargar pago</p>
+        <p className="text-red-400 text-[10px] font-mono">{prefError}</p>
+        <button onClick={() => window.location.reload()} className="text-[10px] underline text-red-500">
+          Reintentar
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      {/* Selector de método */}
-      <div className="grid grid-cols-3 gap-2">
-        {tabs.map(t => (
-          <button
-            key={t.id}
-            onClick={() => { setMethod(t.id); setMsg(null); setCipUrl(null); }}
-            className={`py-3 px-2 text-[10px] font-bold uppercase tracking-widest border transition-all ${method === t.id ? 'bg-edax-primary text-white border-edax-primary' : 'border-gray-200 text-gray-400 hover:border-edax-accent hover:text-edax-accent'}`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Formulario de TARJETA */}
-      {method === 'card' && (
-        <form id="mp-card-form" className="space-y-4">
-          <div className="border-b border-gray-100 pb-3 focus-within:border-edax-accent transition-colors">
-            <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Número de Tarjeta</label>
-            <div id="mp-cardNumber" className="h-10" />
+    <div className="animate-in fade-in duration-500">
+      {isProcessing && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] flex items-center justify-center">
+          <div className="bg-white p-10 shadow-2xl flex flex-col items-center gap-6">
+            <div className="w-12 h-12 border-4 border-edax-accent border-t-transparent rounded-full animate-spin" />
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-edax-primary">
+              Procesando pago...
+            </p>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="border-b border-gray-100 pb-3 focus-within:border-edax-accent transition-colors">
-              <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Vencimiento</label>
-              <div id="mp-expiration" className="h-10" />
-            </div>
-            <div className="border-b border-gray-100 pb-3 focus-within:border-edax-accent transition-colors">
-              <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block mb-1">CVV</label>
-              <div id="mp-cvv" className="h-10" />
-            </div>
-          </div>
-          <div className="border-b border-gray-100 pb-3 focus-within:border-edax-accent transition-colors">
-            <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Titular</label>
-            <div id="mp-cardHolder" className="h-10" />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="border-b border-gray-100 pb-3">
-              <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Tipo Doc.</label>
-              <select id="mp-docType" className="w-full text-sm bg-transparent outline-none py-2" />
-            </div>
-            <div className="border-b border-gray-100 pb-3 focus-within:border-edax-accent transition-colors">
-              <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block mb-1">N° Documento</label>
-              <div id="mp-docNumber" className="h-10" />
-            </div>
-          </div>
-          <div className="border-b border-gray-100 pb-3">
-            <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Email</label>
-            <div id="mp-email" className="h-10" />
-          </div>
-          <select id="mp-installments" className="hidden" />
-          {msg && <p className="text-red-500 text-[10px] font-mono">{msg}</p>}
-          <button
-            type="submit"
-            disabled={isProcessing}
-            className="w-full bg-edax-primary text-white py-5 font-bold uppercase tracking-[0.2em] text-[11px] hover:bg-edax-accent transition-all disabled:opacity-50 flex items-center justify-center gap-3 group"
-          >
-            {isProcessing
-              ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-              : <>PAGAR CON TARJETA S/ {total.toFixed(2)} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" /></>
-            }
-          </button>
-        </form>
-      )}
-
-      {/* Formulario de YAPE */}
-      {method === 'yape' && (
-        <div className="space-y-6">
-          <div className="bg-purple-50 border border-purple-100 p-4 rounded">
-            <p className="text-[10px] font-bold text-purple-700 uppercase tracking-widest mb-1">📱 Cómo pagar con Yape</p>
-            <p className="text-[9px] text-purple-600 font-mono mt-1">1. Abre Yape → toca "Pagar QR" → "Generar código"<br/>2. Ingresa tu número y el código de 6 dígitos aquí</p>
-          </div>
-          <div className="space-y-4">
-            <div className="border-b border-gray-100 focus-within:border-edax-accent transition-colors pb-2">
-              <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Número de Celular Yape</label>
-              <input
-                type="tel" maxLength={9} placeholder="9XXXXXXXX"
-                value={yapPhone} onChange={e => setYapPhone(e.target.value)}
-                className="w-full py-3 text-sm font-mono bg-transparent outline-none"
-              />
-            </div>
-            <div className="border-b border-gray-100 focus-within:border-edax-accent transition-colors pb-2">
-              <label className="text-[8px] font-bold text-gray-400 uppercase tracking-widest block">Código OTP (6 dígitos)</label>
-              <input
-                type="text" maxLength={6} placeholder="······"
-                value={yapOTP} onChange={e => setYapOTP(e.target.value)}
-                className="w-full py-3 text-lg font-mono tracking-[0.5em] text-center bg-transparent outline-none"
-              />
-            </div>
-          </div>
-          {msg && <p className="text-red-500 text-[10px] font-mono">{msg}</p>}
-          <button
-            onClick={handleYapePay}
-            disabled={isProcessing || !yapPhone || !yapOTP}
-            className="w-full bg-purple-600 text-white py-5 font-bold uppercase tracking-[0.2em] text-[11px] hover:bg-purple-700 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
-          >
-            {isProcessing
-              ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-              : <>PAGAR CON YAPE S/ {total.toFixed(2)}</>
-            }
-          </button>
         </div>
       )}
-
-      {/* Formulario de PAGOEFECTIVO */}
-      {method === 'pagoefectivo' && (
-        <div className="space-y-6">
-          {cipUrl ? (
-            <div className="bg-green-50 border border-green-200 p-6 text-center space-y-4">
-              <p className="text-green-700 font-bold text-xs uppercase tracking-widest">✅ Código CIP generado</p>
-              <p className="text-[10px] text-green-600 font-mono">Visita el enlace a continuación para ver tu código de pago y realizarlo en cualquier banco, agente o Yape/Plin.</p>
-              <a href={cipUrl} target="_blank" rel="noopener noreferrer"
-                className="block w-full bg-green-600 text-white py-4 font-bold uppercase tracking-widest text-[10px] hover:bg-green-700 transition-all">
-                Ver mi código CIP →
-              </a>
-            </div>
-          ) : (
-            <>
-              <div className="bg-blue-50 border border-blue-100 p-4 rounded">
-                <p className="text-[10px] font-bold text-blue-700 uppercase tracking-widest mb-1">🏦 PagoEfectivo</p>
-                <p className="text-[9px] text-blue-600 font-mono">Paga en agentes BCP, Interbank, BBVA, Scotiabank, Kasnet y más con un código CIP único.</p>
-              </div>
-              <div className="border border-gray-100 p-4 bg-gray-50">
-                <p className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Email para instrucciones</p>
-                <p className="text-sm font-mono mt-1">{formData.email}</p>
-              </div>
-              {msg && <p className="text-red-500 text-[10px] font-mono">{msg}</p>}
-              <button
-                onClick={handlePagoEfectivo}
-                disabled={isProcessing}
-                className="w-full bg-blue-600 text-white py-5 font-bold uppercase tracking-[0.2em] text-[11px] hover:bg-blue-700 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
-              >
-                {isProcessing
-                  ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  : <>GENERAR CÓDIGO DE PAGO S/ {total.toFixed(2)}</>
-                }
-              </button>
-            </>
-          )}
-        </div>
-      )}
-
-      <p className="text-center text-[8px] font-mono text-gray-300 uppercase tracking-widest">
-        🔒 Pago 100% seguro · Checkout API Mercado Pago · Perú
-      </p>
+      <div id={BRICK_CONTAINER} />
     </div>
   );
 }
-
-
-
-
 
