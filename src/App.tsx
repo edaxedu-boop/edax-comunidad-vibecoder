@@ -490,7 +490,6 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
       alert("¡Pago realizado con éxito! Tu orden ha sido confirmada.");
       setCart([]);
       setIsCartOpen(false);
-      setIsCheckout(false);
       // Limpiar parámetros de la URL sin recargar
       window.history.replaceState({}, document.title, window.location.pathname);
     }
