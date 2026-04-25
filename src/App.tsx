@@ -565,41 +565,42 @@ function Tienda() {
                     )}
                   </>
                 ) : (
-                  <form id="checkout-form" onSubmit={handlePay} className="space-y-4">
-                    <h4 className="font-bold uppercase tracking-widest text-sm mb-4">Datos de Compra</h4>
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Nombre Completo</label>
-                      <input required type="text" className="w-full border border-gray-300 p-3 text-sm focus:border-edax-accent outline-none" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Número Celular</label>
-                      <input required type="tel" className="w-full border border-gray-300 p-3 text-sm focus:border-edax-accent outline-none" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Correo Electrónico</label>
-                      <input required type="email" className="w-full border border-gray-300 p-3 text-sm focus:border-edax-accent outline-none" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
-                    </div>
-                ) : (
-                  <div className="space-y-6">
-                    <div className="flex justify-between items-center mb-4">
+                  <div className="space-y-8 animate-in fade-in duration-500">
+                    <div className="flex justify-between items-center">
                        <button onClick={() => setIsCheckout(false)} className="text-[10px] uppercase font-bold text-gray-500 hover:text-black flex items-center gap-1 transition-colors">
                           <ArrowRight className="rotate-180" size={12} /> Volver al Carrito
                        </button>
                     </div>
+                    
+                    {/* Sección 1: Datos de Contacto */}
+                    <div className="space-y-4">
+                      <h4 className="font-bold uppercase tracking-widest text-[11px] text-edax-accent mb-4 border-l-2 border-edax-accent pl-3">01. Datos de Envío</h4>
+                      <div className="grid gap-4">
+                        <input required placeholder="NOMBRE COMPLETO" className="w-full border-b border-gray-100 py-3 text-xs font-mono outline-none focus:border-edax-accent bg-transparent" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                        <div className="grid grid-cols-2 gap-4">
+                          <input required placeholder="EMAIL" className="w-full border-b border-gray-100 py-3 text-xs font-mono outline-none focus:border-edax-accent bg-transparent" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                          <input required placeholder="CELULAR" className="w-full border-b border-gray-100 py-3 text-xs font-mono outline-none focus:border-edax-accent bg-transparent" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+                        </div>
+                      </div>
+                    </div>
 
-                    <NativePaymentForm 
-                      total={total} 
-                      formData={formData} 
-                      setFormData={setFormData}
-                      cart={cart}
-                      onSuccess={() => {
-                        setCart([]);
-                        setIsCartOpen(false);
-                        setIsCheckout(false);
-                      }}
-                      isProcessing={isProcessing}
-                      setIsProcessing={setIsProcessing}
-                    />
+                    {/* Sección 2: Pago */}
+                    <div className="space-y-6 pt-4">
+                      <h4 className="font-bold uppercase tracking-widest text-[11px] text-edax-accent mb-4 border-l-2 border-edax-accent pl-3">02. Método de Pago</h4>
+                      <NativePaymentForm 
+                        total={total} 
+                        formData={formData} 
+                        setFormData={setFormData}
+                        cart={cart}
+                        onSuccess={() => {
+                          setCart([]);
+                          setIsCartOpen(false);
+                          setIsCheckout(false);
+                        }}
+                        isProcessing={isProcessing}
+                        setIsProcessing={setIsProcessing}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
