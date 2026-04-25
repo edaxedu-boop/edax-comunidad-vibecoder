@@ -471,22 +471,7 @@ function Home() {
   );
 }
 
-function App() {
-  const [cart, setCart] = useState<{id: string, name: string, price: number, size: string, color: string}[]>([]);
-  const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
 
-  return (
-    <div className="bg-edax-bg text-edax-primary selection:bg-edax-accent selection:text-white">
-      <Navbar cartCount={cart.length} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/tienda" element={<Tienda cart={cart} setCart={setCart} formData={formData} setFormData={setFormData} />} />
-        <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} formData={formData} setFormData={setFormData} />} />
-      </Routes>
-      <Footer />
-    </div>
-  );
-}
 
 function Tienda({ cart, setCart, formData, setFormData }: any) {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -688,6 +673,8 @@ function Tienda({ cart, setCart, formData, setFormData }: any) {
 export default function App() {
   const { pathname } = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [cart, setCart] = useState<{id: string, name: string, price: number, size: string, color: string}[]>([]);
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -767,7 +754,8 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/tienda" element={<Tienda />} />
+        <Route path="/tienda" element={<Tienda cart={cart} setCart={setCart} formData={formData} setFormData={setFormData} />} />
+        <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} formData={formData} setFormData={setFormData} />} />
       </Routes>
 
       {/* CTA */}
