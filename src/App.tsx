@@ -1009,8 +1009,7 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
 
       const settings = {
         initialization: {
-          amount: total,
-          preferenceId: preferenceId, // CLAVE: Con el PreferenceID aparecen todos los métodos
+          preferenceId: preferenceId, // La preferencia ya contiene el monto y los items
           payer: {
             email: formData.email,
           },
@@ -1021,6 +1020,7 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
             debitCard: "all",
             ticket: "all",
             bankTransfer: "all",
+            mercadoPago: "all",
             maxInstallments: 1
           },
           visual: {
