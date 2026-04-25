@@ -992,13 +992,15 @@ function NativePaymentForm({ total, formData, cart, onSuccess, isProcessing, set
             paymentMethods: {
               creditCard: "all",
               debitCard: "all",
-              ticket: "all", // PagoEfectivo
-              bankTransfer: ["yape"], // Yape
+              ticket: "all",
+              bankTransfer: "all",
+              wallet: "all",
               maxInstallments: 1
             },
             visual: {
+              hideStatusDetails: false,
               style: {
-                theme: "default", // Usamos el default para máxima compatibilidad
+                theme: "default",
               },
             },
           },
